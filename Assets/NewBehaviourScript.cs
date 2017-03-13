@@ -46,8 +46,9 @@ public class NewBehaviourScript : MonoBehaviour
     public Camera cam_holder;
     float x_axis, y_axis, z_axis, _rotY, _rotX; //мышь по x, y, зум, координаты для обзора
 
-
-    // Use this for initialization
+    /// <summary>
+    /// установка цвета на основании отдалённости
+    /// </summary>
     public void ValueChangeCheck()
     {
         Debug.Log(myS.value);
@@ -74,7 +75,6 @@ public class NewBehaviourScript : MonoBehaviour
 
             float percentRED = dist / (maxDist / 100);
 
-
             float www = (100 - percentRED) / 100;
 
             item.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
@@ -83,9 +83,6 @@ public class NewBehaviourScript : MonoBehaviour
         }
 
     }
-
-
-    
 
     void Start()
     {
@@ -135,6 +132,7 @@ public class NewBehaviourScript : MonoBehaviour
         //panelSection.GetComponent<Renderer>().transform.localScale = Vector3.zero;
             //respawnPrefab.GetComponent<Renderer>().transform.localScale;
 
+        //секция котороя передвигается 
         panelSection = GameObject.FindWithTag("panelSection");
 
         panelSection.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
@@ -168,10 +166,7 @@ public class NewBehaviourScript : MonoBehaviour
         
     }
 
-    //public void Awake()
-    //{
-    //    Debug.Log("Awake");
-    //}
+
     void LookAtTarget()
     {
         Quaternion rotation = Quaternion.Euler(_rotY, _rotX, 0); //задает вращение камеры 

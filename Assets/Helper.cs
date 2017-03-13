@@ -8,7 +8,18 @@ using System;
 namespace Helpers
 {
     public class Helper
-    {
+    {           
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="respawnPrefab">Секция на место которой создаются секции</param>
+        /// <param name="Claster">Обьект в который нужно вписать шары</param>
+        /// <param name="EnableClaster">true - показать все точки, false - скрыть точки вне кластера</param>
+        /// <param name="opVal">Прозрачность секции</param>
+        /// <param name="maxDist">Максимальная дистация </param>
+        /// <param name="centerPanelSection">Позиция секции</param>
+        /// <returns>Возвращает секцию с шарами</returns>
         public static GameObject createNewBoolsPanel(GameObject respawnPrefab, GameObject Claster, bool EnableClaster, float opVal, float maxDist, Vector3 centerPanelSection)
         {
             GameObject cyb = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -39,11 +50,16 @@ namespace Helpers
 
         }
 
-        //функция которая помещает шары в обьект
+        /// <summary>
+        /// Функция которая помещает шары в обьект 
+        /// </summary>
+        /// <param name="cyb">обьект в который будут помещены точки</param>
+        /// <param name="EnableClaster">true - показать все точки, false - скрыть точки вне кластера</param>
+        /// <param name="opVal">Прозрачность секции</param>
+        /// <param name="centerPanelSection">Позиция секции</param>
+        /// <param name="Claster">Обьект в который нужно вписать шары</param>
         public static void putBools(ref GameObject cyb, bool EnableClaster, float opVal, Vector3 centerPanelSection, GameObject Claster)
         {
-            
-            
             for (int x = 0; x < 50; x++)
             {
                 for (int y = 0; y < 50; y++)
@@ -88,6 +104,13 @@ namespace Helpers
             }
         }
 
+        /// <summary>
+        /// Функция получения цвета для точки на основании отдолённости от цвета 
+        /// </summary>
+        /// <param name="centerCube">Координаты центра</param>
+        /// <param name="positionShare">Координаты точки</param>
+        /// <param name="maxDist">Максимальная дистанция</param>
+        /// <returns></returns>
         public static Color getColor(Vector3 centerCube, Vector3 positionShare, float maxDist)
         {
 

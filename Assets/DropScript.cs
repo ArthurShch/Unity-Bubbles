@@ -50,9 +50,6 @@ public class DropScript : MonoBehaviour
         ScrollbarOpacity = GameObject.FindWithTag("ScrollbarOpacity").GetComponent<Scrollbar>();
         ModeView = GameObject.FindWithTag("ModeView").GetComponent<Toggle>();
 
-
-      
-
         sections = new List<GameObject>();
         listOpacity = new List<float>();
 
@@ -79,6 +76,9 @@ public class DropScript : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Изменение режима просмотра
+    /// </summary>
     void changeMode()
     {
         if (ModeView.isOn)
@@ -104,17 +104,17 @@ public class DropScript : MonoBehaviour
                     = new Color(oldCol.r, oldCol.g, oldCol.b, 0);
             }
 
-
             foreach (GameObject item in sections)
             {
                 Color oldCol = item.GetComponent<Renderer>().material.color;
                 item.GetComponent<Renderer>().material.color = new Color(oldCol.r, oldCol.g, oldCol.b, 0);
             }
-
-
             //panelSection
         }
     }
+    /// <summary>
+    /// Изменение прозрачности выделенной секции
+    /// </summary>
     void ChangeOpasitySelectedSection()
     {
         if (sections.Count != 0)
@@ -129,24 +129,23 @@ public class DropScript : MonoBehaviour
                     = new Color(oldColor.r, oldColor.g, oldColor.b, opVal);
             }
         }
-
-
-
     }
-
+    /// <summary>
+    /// Прересоздать секции с учётом поподания точек в кластер
+    /// </summary>
     private void ToggleEnableClaster()
     {
-        List<Vector3> nnnn = new List<Vector3>();
+        List<Vector3> positionSections = new List<Vector3>();
 
         foreach (GameObject item in sections)
         {
-            nnnn.Add(item.transform.position);
+            positionSections.Add(item.transform.position);
             Destroy(item);
         }
 
         sections.Clear();
 
-        for (int i = 0; i < nnnn.Count; i++)
+        for (int i = 0; i < positionSections.Count; i++)
         {
             sections.Add(Helper.createNewBoolsPanel
             (
@@ -155,29 +154,27 @@ public class DropScript : MonoBehaviour
                 EnableClaster.isOn,
                 listOpacity[i],
                 maxDist,
-                nnnn[i]
+                positionSections[i]
             ));
-            //sections.Add(kreate(nnnn[i], listOpacity[i]));
         }
 
     }
-
+    /// <summary>
+    /// Изменение цвета секции которая выделена с учётом режима просмотра
+    /// </summary>
     private void myDropdownValueChangedHandler()
     {
-
+        //полная прозрачность для не выделенных
         foreach (var item in sections)
         {
             item.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
         }
 
+        //режима просмотра
         if (ModeView.isOn)
         {
             sections[Drop.value].GetComponent<Renderer>().material.color = new Color(0, 1, 0, 0.8f);
         }
-
-
-       
-
         // sections.RemoveAt(Drop.value);
 
 
@@ -247,7 +244,9 @@ public class DropScript : MonoBehaviour
     //}
 
 
-    //добавление новой секции
+    /// <summary>
+    /// Добавление новой секции
+    /// </summary>
     public void AddNewOption()
     {
         //ScrollbarOpacity.value;
@@ -274,7 +273,9 @@ public class DropScript : MonoBehaviour
 
        // Debug.Log("new text");
     }
-
+    /// <summary>
+    /// Удаление секции 
+    /// </summary>
     public void DeleteOption()
     {
         Drop.options.RemoveAt(Drop.value);
