@@ -24,7 +24,7 @@ public class NewBehaviourScript : MonoBehaviour
 
 
 
-    //1 обёмные фигуры 
+    //1 обёмные фигуры  в кластере
     //2 показывать какая выбрана
   
     //4 движение панели с кружочками в 3х плоскостях
@@ -52,12 +52,18 @@ public class NewBehaviourScript : MonoBehaviour
     {
         Debug.Log(myS.value);
 
+        //panelSection.transform.position = new Vector3(
+        //    panelSection.transform.position.x,
+        //    panelSection.transform.position.y,
+        //    startPoint - myS.value
+        //    );
+
         panelSection.transform.position = new Vector3(
             panelSection.transform.position.x,
-            panelSection.transform.position.y,
-            startPoint - myS.value
+            startPoint - myS.value,
+            panelSection.transform.position.z
+            
             );
-
 
         //здесь можно использовать функуию из хелпера
         foreach (GameObject item in sharePoint)
@@ -102,8 +108,13 @@ public class NewBehaviourScript : MonoBehaviour
         myS.minValue = 0;
         myS.maxValue = respawnPrefab.GetComponent<Renderer>().transform.localScale.z;
 
-        startPoint = respawnPrefab.GetComponent<Renderer>().bounds.center.z
-            + respawnPrefab.GetComponent<Renderer>().transform.localScale.z * 0.5f;
+        //startPoint = respawnPrefab.GetComponent<Renderer>().bounds.center.z
+        //    + respawnPrefab.GetComponent<Renderer>().transform.localScale.z * 0.5f;
+
+
+        startPoint = respawnPrefab.GetComponent<Renderer>().bounds.center.y
+            + respawnPrefab.GetComponent<Renderer>().transform.localScale.y * 0.5f;
+
 
         Vector3 VMaxDist = new Vector3(
             respawnPrefab.GetComponent<Renderer>().bounds.center.x + respawnPrefab.GetComponent<Renderer>().transform.localScale.x * 0.5f,

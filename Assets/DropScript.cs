@@ -247,6 +247,7 @@ public class DropScript : MonoBehaviour
     //}
 
 
+    //добавление новой секции
     public void AddNewOption()
     {
         //ScrollbarOpacity.value;

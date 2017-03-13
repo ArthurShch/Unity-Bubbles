@@ -39,6 +39,7 @@ namespace Helpers
 
         }
 
+        //функция которая помещает шары в обьект
         public static void putBools(ref GameObject cyb, bool EnableClaster, float opVal, Vector3 centerPanelSection, GameObject Claster)
         {
             
@@ -47,10 +48,15 @@ namespace Helpers
             {
                 for (int y = 0; y < 50; y++)
                 {
+                    //Vector3 Dot = new Vector3(
+                    //    x + centerPanelSection.x - (50 * 0.5f),
+                    //    y + centerPanelSection.y - (50 * 0.5f),
+                    //    centerPanelSection.z);
+
                     Vector3 Dot = new Vector3(
-                        x + centerPanelSection.x - (50 * 0.5f),
-                        y + centerPanelSection.y - (50 * 0.5f),
-                        centerPanelSection.z);
+                       x + centerPanelSection.x - (50 * 0.5f),
+                       centerPanelSection.y ,
+                       y + centerPanelSection.z - (50 * 0.5f));
 
                     if (!EnableClaster)
                     {
