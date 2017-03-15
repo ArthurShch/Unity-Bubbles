@@ -8,7 +8,7 @@ using System;
 namespace Helpers
 {
     public class Helper
-    {           
+    {
 
         /// <summary>
         /// 
@@ -25,7 +25,7 @@ namespace Helpers
             GameObject cyb = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
             //Vector3 centerPanelSection = panelSection.GetComponent<Renderer>().bounds.center;
-            
+
             cyb.GetComponent<Renderer>().transform.position = centerPanelSection;
             // cyb.GetComponent<Renderer>().transform.localScale = panelSection.GetComponent<Renderer>().transform.lossyScale;
 
@@ -58,21 +58,45 @@ namespace Helpers
         /// <param name="opVal">Прозрачность секции</param>
         /// <param name="centerPanelSection">Позиция секции</param>
         /// <param name="Claster">Обьект в который нужно вписать шары</param>
-        public static void putBools(ref GameObject cyb, bool EnableClaster, float opVal, Vector3 centerPanelSection, GameObject Claster)
+        public static void putBools(ref GameObject cyb, bool EnableClaster, float opVal, Vector3 centerPanelSection, GameObject Claster, int side = 0)
         {
             for (int x = 0; x < 50; x++)
             {
                 for (int y = 0; y < 50; y++)
                 {
-                    //Vector3 Dot = new Vector3(
-                    //    x + centerPanelSection.x - (50 * 0.5f),
-                    //    y + centerPanelSection.y - (50 * 0.5f),
-                    //    centerPanelSection.z);
-
-                    Vector3 Dot = new Vector3(
+                    Vector3 Dot = new Vector3();
+                    switch (side)
+                    {
+                        case 0:
+                            {
+                                Dot = new Vector3(
+                     centerPanelSection.x,
+                     x + centerPanelSection.y - (50 * 0.5f),
+                     y + centerPanelSection.z - (50 * 0.5f));
+                               
+                            }
+                            break;
+                        case 1:
+                            {
+                                Dot = new Vector3(
                        x + centerPanelSection.x - (50 * 0.5f),
-                       centerPanelSection.y ,
-                       y + centerPanelSection.z - (50 * 0.5f));
+                       y + centerPanelSection.y - (50 * 0.5f),
+                       centerPanelSection.z);
+
+                                
+                            }
+                            break;
+                        case 2:
+                            {
+                                Dot = new Vector3(
+                     x + centerPanelSection.x - (50 * 0.5f),
+                     centerPanelSection.y,
+                     y + centerPanelSection.z -  (50 * 0.5f));
+                            }
+                            break;
+                        default:
+                            break;
+                    }
 
                     if (!EnableClaster)
                     {
@@ -96,6 +120,7 @@ namespace Helpers
 
 
                     // cylinder.transform.localScale = new Vector3(cylinder.transform.localScale.x, cylinder.transform.localScale.y, 0.1f);
+
                     cylinder.transform.parent = cyb.transform;
                     //cylinder.transform.parent = panelSection.transform;
                     //cylinder.transform.localScale = new Vector3(1, 1, 1);

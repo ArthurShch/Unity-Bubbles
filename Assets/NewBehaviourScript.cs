@@ -7,14 +7,14 @@ using Helpers;
 public class NewBehaviourScript : MonoBehaviour
 {
     GameObject panelSection;
-    public GameObject respawnPrefab;
-    Slider myS;
-    Button NewPanelButton;
+    public GameObject MainCube;
+    Slider SliderOfNewSection;
+    // Button NewPanelButton;
     GameObject Claster;
     Vector3 centerCube;
+    Dropdown SideSection;  //выбор стороны поворота секции
 
-
-    List<GameObject> sharePoint;
+    List<GameObject> sharePoint;// секция которая двигается
     float startPoint;
     float maxDist;
 
@@ -26,12 +26,12 @@ public class NewBehaviourScript : MonoBehaviour
 
     //1 обёмные фигуры  в кластере
     //2 показывать какая выбрана
-  
+
     //4 движение панели с кружочками в 3х плоскостях
-    
+
     //!!!!!!!!!!!!новое
     //5 анимированное прохождение по срезам, с регулировакой скорости прохождения 
-    
+
 
     //6 при перемещении panelSection соблюдать 
     //законы отрисовки относительно вписанной фигуры
@@ -47,25 +47,58 @@ public class NewBehaviourScript : MonoBehaviour
     float x_axis, y_axis, z_axis, _rotY, _rotX; //мышь по x, y, зум, координаты для обзора
 
     /// <summary>
-    /// установка цвета на основании отдалённости
+    /// установка цвета на основании отдалённости при движении секции
     /// </summary>
     public void ValueChangeCheck()
     {
-        Debug.Log(myS.value);
+        Debug.Log(SliderOfNewSection.value);
 
-        //panelSection.transform.position = new Vector3(
-        //    panelSection.transform.position.x,
-        //    panelSection.transform.position.y,
-        //    startPoint - myS.value
-        //    );
+        //здесь направление передвижения секции 3 варианта 3 плоскости
 
-        panelSection.transform.position = new Vector3(
-            panelSection.transform.position.x,
-            startPoint - myS.value,
-            panelSection.transform.position.z
-            
-            );
+        switch (SideSection.value)
+        {
+            case 0:
+                {
+                    panelSection.transform.position = new Vector3(
+                        startPoint - SliderOfNewSection.value,
+                        panelSection.transform.position.y,
+                        panelSection.transform.position.z
+                    );
 
+
+                } break;
+            case 1:
+                {
+
+                    panelSection.transform.position = new Vector3(
+                        panelSection.transform.position.x,
+                        panelSection.transform.position.y,
+                        startPoint - SliderOfNewSection.value
+                        );
+                } break;
+            case 2:
+                {
+
+                    panelSection.transform.position = new Vector3(
+                        panelSection.transform.position.x,
+                        startPoint - SliderOfNewSection.value,
+                        panelSection.transform.position.z
+                    );
+
+                    
+
+                } break;
+            default:
+                break;
+        }
+        ColoredBubls();
+    }
+
+    /// <summary>
+    /// раскрасить шары в соответствии с отдалённостью
+    /// </summary>
+    private void ColoredBubls()
+    {
         //здесь можно использовать функуию из хелпера
         foreach (GameObject item in sharePoint)
         {
@@ -79,8 +112,64 @@ public class NewBehaviourScript : MonoBehaviour
 
             item.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
             item.GetComponent<Renderer>().material.color = new Color(1, www, www, 1);
-
         }
+    }
+
+    /// <summary>
+    /// пересоздать движущиеся секцию при изменени стороны движения
+    /// </summary>
+    private void SideSectionChange()
+    {
+        switch (SideSection.value)
+        {
+            case 0:
+                {
+                    startPoint = MainCube.GetComponent<Renderer>().bounds.center.x
+           + MainCube.GetComponent<Renderer>().transform.localScale.x * 0.5f;
+                }
+                break;
+            case 1:
+                {
+                    startPoint = MainCube.GetComponent<Renderer>().bounds.center.z
+                        + MainCube.GetComponent<Renderer>().transform.localScale.z * 0.5f;
+                   
+                }
+                break;
+            case 2:
+                {
+                    startPoint = MainCube.GetComponent<Renderer>().bounds.center.y
+                       + MainCube.GetComponent<Renderer>().transform.localScale.y * 0.5f;
+                }
+                break;
+            default:
+                break;
+        }
+
+
+
+
+
+
+
+
+
+
+        //удаленеи внутренностей обьекта
+        for (int i = panelSection.transform.childCount - 1; i >= 0; i--)
+            Destroy(panelSection.transform.GetChild(i).gameObject);
+        panelSection.transform.DetachChildren();
+
+        Helper.putBools(ref panelSection, true, 1f, panelSection.transform.position, Claster, SideSection.value);
+
+        //sharePoint = new List<GameObject>();
+        sharePoint.Clear();
+        //нельзя копировать большой обьект поэтому копируются маленькие
+        for (int i = 0; i < panelSection.transform.childCount; i++)
+        {
+            sharePoint.Add(panelSection.transform.GetChild(i).gameObject);
+        }
+
+        ColoredBubls();
 
     }
 
@@ -88,40 +177,38 @@ public class NewBehaviourScript : MonoBehaviour
     {
 
         cam_holder = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        
-        
-        respawnPrefab = GameObject.FindWithTag("CenterAquo");
-        respawnPrefab.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
+        SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
+        SideSection.onValueChanged.AddListener(delegate { SideSectionChange(); });
+
+        MainCube = GameObject.FindWithTag("CenterAquo");
+        MainCube.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
         // Vector3[] wwww =  respawnPrefab.GetComponent<MeshFilter>().mesh.vertices;
         // respawnPrefab.GetComponent<MeshRenderer>().bounds.
-        
-        centerCube = respawnPrefab.GetComponent<Renderer>().bounds.center;
+
+        centerCube = MainCube.GetComponent<Renderer>().bounds.center;
 
 
         //Vector3 centerScale = respawnPrefab.GetComponent<Renderer>().transform.localScale;
 
-        myS = GameObject.FindWithTag("SliderOfNewSection").GetComponent<Slider>();
-        myS.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
-        myS.minValue = 0;
-        myS.maxValue = respawnPrefab.GetComponent<Renderer>().transform.localScale.z;
-
-        //startPoint = respawnPrefab.GetComponent<Renderer>().bounds.center.z
-        //    + respawnPrefab.GetComponent<Renderer>().transform.localScale.z * 0.5f;
+        SliderOfNewSection = GameObject.FindWithTag("SliderOfNewSection").GetComponent<Slider>();
+        SliderOfNewSection.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        SliderOfNewSection.minValue = 0;
+        SliderOfNewSection.maxValue = MainCube.GetComponent<Renderer>().transform.localScale.z;
 
 
-        startPoint = respawnPrefab.GetComponent<Renderer>().bounds.center.y
-            + respawnPrefab.GetComponent<Renderer>().transform.localScale.y * 0.5f;
+
+
 
 
         Vector3 VMaxDist = new Vector3(
-            respawnPrefab.GetComponent<Renderer>().bounds.center.x + respawnPrefab.GetComponent<Renderer>().transform.localScale.x * 0.5f,
-            respawnPrefab.GetComponent<Renderer>().bounds.center.y + respawnPrefab.GetComponent<Renderer>().transform.localScale.y * 0.5f,
-            respawnPrefab.GetComponent<Renderer>().bounds.center.z + respawnPrefab.GetComponent<Renderer>().transform.localScale.z * 0.5f
+            MainCube.GetComponent<Renderer>().bounds.center.x + MainCube.GetComponent<Renderer>().transform.localScale.x * 0.5f,
+            MainCube.GetComponent<Renderer>().bounds.center.y + MainCube.GetComponent<Renderer>().transform.localScale.y * 0.5f,
+            MainCube.GetComponent<Renderer>().bounds.center.z + MainCube.GetComponent<Renderer>().transform.localScale.z * 0.5f
             );
 
         maxDist = Vector3.Distance(VMaxDist, centerCube);
 
-        NewPanelButton = GameObject.FindWithTag("NewPanelButton").GetComponent<Button>();
+        //NewPanelButton = GameObject.FindWithTag("NewPanelButton").GetComponent<Button>();
 
 
         Claster = GameObject.FindWithTag("Claster");
@@ -130,7 +217,7 @@ public class NewBehaviourScript : MonoBehaviour
 
         //panelSection.gameObject.transform.localScale += Vector3.zero;
         //panelSection.GetComponent<Renderer>().transform.localScale = Vector3.zero;
-            //respawnPrefab.GetComponent<Renderer>().transform.localScale;
+        //respawnPrefab.GetComponent<Renderer>().transform.localScale;
 
         //секция котороя передвигается 
         panelSection = GameObject.FindWithTag("panelSection");
@@ -139,17 +226,11 @@ public class NewBehaviourScript : MonoBehaviour
         panelSection.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
         Vector3 centerPanelSection = panelSection.GetComponent<Renderer>().bounds.center;
         //float cla = panelSection.GetComponent<Renderer>().transform.localScale.x;
-
-        Helper.putBools(ref panelSection, true, 1f, panelSection.transform.position, Claster);
-
         sharePoint = new List<GameObject>();
 
-        for (int i = 0; i < panelSection.transform.childCount; i++)
-        {
-            sharePoint.Add(panelSection.transform.GetChild(i).gameObject);
-        }
+        SideSectionChange();
 
-        target = respawnPrefab.transform;
+        target = MainCube.transform;
 
         //камера
         _rotY = transform.eulerAngles.y;
@@ -162,9 +243,10 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        
+
+
     }
+
 
 
     void LookAtTarget()

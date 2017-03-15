@@ -10,8 +10,9 @@ public class DropScript : MonoBehaviour
 
     List<GameObject> sections;
     List<float> listOpacity;
-    Dropdown Drop;
-    GameObject panelSection;
+    Dropdown Drop;  //выбор ранее созданной секции 
+    Dropdown SideSection;  //выбор стороны поворота секции
+    GameObject panelSection; // секция которая двигается 
     Toggle EnableClaster;
     GameObject respawnPrefab;
     GameObject Claster;
@@ -43,6 +44,7 @@ public class DropScript : MonoBehaviour
     {
 
         respawnPrefab = GameObject.FindWithTag("CenterAquo");
+        SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
         Drop = GameObject.FindWithTag("Drop").GetComponent<Dropdown>();
         EnableClaster = GameObject.FindWithTag("EnableClaster").GetComponent<Toggle>();
         panelSection = GameObject.FindWithTag("panelSection");
@@ -63,6 +65,7 @@ public class DropScript : MonoBehaviour
 
         maxDist = Vector3.Distance(VMaxDist, centerCube);
 
+        SideSection.onValueChanged.AddListener(delegate { SideSectionChange(); });
         Drop.onValueChanged.AddListener(delegate { myDropdownValueChangedHandler(); });
         EnableClaster.onValueChanged.AddListener(delegate { ToggleEnableClaster(); });
         ModeView.onValueChanged.AddListener(delegate { changeMode(); });
@@ -159,6 +162,13 @@ public class DropScript : MonoBehaviour
         }
 
     }
+
+    private void SideSectionChange() 
+    {
+
+    }
+    
+
     /// <summary>
     /// Изменение цвета секции которая выделена с учётом режима просмотра
     /// </summary>
