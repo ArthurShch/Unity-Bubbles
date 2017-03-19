@@ -10,6 +10,7 @@ public class DropScript : MonoBehaviour
 
     List<GameObject> sections;
     List<float> listOpacity;
+    List<int> listRotate; 
     Dropdown Drop;  //выбор ранее созданной секции 
     Dropdown SideSection;  //выбор стороны поворота секции
     GameObject panelSection; // секция которая двигается 
@@ -54,6 +55,7 @@ public class DropScript : MonoBehaviour
 
         sections = new List<GameObject>();
         listOpacity = new List<float>();
+        listRotate = new List<int>();
 
         centerCube = respawnPrefab.GetComponent<Renderer>().bounds.center;
 
@@ -157,7 +159,8 @@ public class DropScript : MonoBehaviour
                 EnableClaster.isOn,
                 listOpacity[i],
                 maxDist,
-                positionSections[i]
+                positionSections[i], 
+                listRotate[i]
             ));
         }
 
@@ -274,6 +277,7 @@ public class DropScript : MonoBehaviour
 
         //sections.Add(kreate(panelSection.GetComponent<Renderer>().bounds.center, ScrollbarOpacity.value));
         listOpacity.Add(ScrollbarOpacity.value);
+        listRotate.Add(SideSection.value);
         //        sections.Add(Instantiate(panelSection));
         Drop.options.Add(new Dropdown.OptionData("new text"));
 
@@ -294,5 +298,6 @@ public class DropScript : MonoBehaviour
         Destroy(sections[Drop.value]);
         sections.RemoveAt(Drop.value);
         listOpacity.RemoveAt(Drop.value);
+        listRotate.RemoveAt(Drop.value);
     }
 }
