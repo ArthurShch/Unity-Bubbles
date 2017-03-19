@@ -20,7 +20,7 @@ namespace Helpers
         /// <param name="maxDist">Максимальная дистация </param>
         /// <param name="centerPanelSection">Позиция секции</param>
         /// <returns>Возвращает секцию с шарами</returns>
-        public static GameObject createNewBoolsPanel(GameObject respawnPrefab, GameObject Claster, bool EnableClaster, float opVal, float maxDist, Vector3 centerPanelSection)
+        public static GameObject createNewBoolsPanel(GameObject respawnPrefab, GameObject Claster, bool EnableClaster, float opVal, float maxDist, Vector3 centerPanelSection, int side = 0)
         {
             GameObject cyb = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
@@ -33,7 +33,7 @@ namespace Helpers
             cyb.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
             cyb.transform.localScale = new Vector3(50, 50, 2);
 
-            putBools(ref cyb, EnableClaster, opVal, centerPanelSection, Claster);
+            putBools(ref cyb, EnableClaster, opVal, centerPanelSection, Claster, side);
 
             Vector3 centerCube = respawnPrefab.transform.position;
 
@@ -70,19 +70,18 @@ namespace Helpers
                         case 0:
                             {
                                 Dot = new Vector3(
-                     centerPanelSection.x,
-                     x + centerPanelSection.y - (50 * 0.5f),
-                     y + centerPanelSection.z - (50 * 0.5f));
+                       x + centerPanelSection.x - (50 * 0.5f),
+                       y + centerPanelSection.y - (50 * 0.5f),
+                       centerPanelSection.z);
                                
                             }
                             break;
                         case 1:
                             {
                                 Dot = new Vector3(
-                       x + centerPanelSection.x - (50 * 0.5f),
-                       y + centerPanelSection.y - (50 * 0.5f),
-                       centerPanelSection.z);
-
+                     centerPanelSection.x,
+                     x + centerPanelSection.y - (50 * 0.5f),
+                     y + centerPanelSection.z - (50 * 0.5f));
                                 
                             }
                             break;

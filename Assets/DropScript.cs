@@ -268,7 +268,8 @@ public class DropScript : MonoBehaviour
                 EnableClaster.isOn,
                 ScrollbarOpacity.value,
                 maxDist,
-                panelSection.GetComponent<Renderer>().bounds.center
+                panelSection.GetComponent<Renderer>().bounds.center, 
+                SideSection.value
             ));
 
         //sections.Add(kreate(panelSection.GetComponent<Renderer>().bounds.center, ScrollbarOpacity.value));

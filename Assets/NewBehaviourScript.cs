@@ -59,22 +59,26 @@ public class NewBehaviourScript : MonoBehaviour
         {
             case 0:
                 {
-                    panelSection.transform.position = new Vector3(
-                        startPoint - SliderOfNewSection.value,
-                        panelSection.transform.position.y,
-                        panelSection.transform.position.z
-                    );
-
-
-                } break;
-            case 1:
-                {
-
+                    //panelSection.transform.position = new Vector3(
+                    //    startPoint - SliderOfNewSection.value,
+                    //    panelSection.transform.position.y,
+                    //    panelSection.transform.position.z
+                    //);
                     panelSection.transform.position = new Vector3(
                         panelSection.transform.position.x,
                         panelSection.transform.position.y,
                         startPoint - SliderOfNewSection.value
                         );
+
+                } break;
+            case 1:
+                {
+                    panelSection.transform.position = new Vector3(
+                        startPoint - SliderOfNewSection.value,
+                        panelSection.transform.position.y,
+                        panelSection.transform.position.z
+                    );
+                    
                 } break;
             case 2:
                 {
@@ -85,7 +89,7 @@ public class NewBehaviourScript : MonoBehaviour
                         panelSection.transform.position.z
                     );
 
-                    
+
 
                 } break;
             default:
@@ -120,23 +124,54 @@ public class NewBehaviourScript : MonoBehaviour
     /// </summary>
     private void SideSectionChange()
     {
+
         switch (SideSection.value)
         {
             case 0:
                 {
-                    startPoint = MainCube.GetComponent<Renderer>().bounds.center.x
-           + MainCube.GetComponent<Renderer>().transform.localScale.x * 0.5f;
+                    panelSection.transform.rotation = Quaternion.identity;
+                    panelSection.transform.position = new Vector3(
+                        MainCube.transform.position.x,
+                        MainCube.transform.position.y,
+                        panelSection.transform.position.z
+                        );
+
+                    //panelSection.transform.Rotate(0, 0, 0);
+
+                    startPoint = MainCube.GetComponent<Renderer>().bounds.center.z
+                        + MainCube.GetComponent<Renderer>().transform.localScale.z * 0.5f;
+
+           //         startPoint = MainCube.GetComponent<Renderer>().bounds.center.x
+           //+ MainCube.GetComponent<Renderer>().transform.localScale.x * 0.5f;
                 }
                 break;
             case 1:
                 {
-                    startPoint = MainCube.GetComponent<Renderer>().bounds.center.z
-                        + MainCube.GetComponent<Renderer>().transform.localScale.z * 0.5f;
-                   
+                    panelSection.transform.rotation = Quaternion.identity;
+                    panelSection.transform.Rotate(0, 90, 0);
+                    panelSection.transform.position = new Vector3(
+                       panelSection.transform.position.x,
+                       MainCube.transform.position.y,
+                       MainCube.transform.position.z
+                       );
+
+                    startPoint = MainCube.GetComponent<Renderer>().bounds.center.x
+                        + MainCube.GetComponent<Renderer>().transform.localScale.x * 0.5f;
                 }
                 break;
             case 2:
                 {
+                    panelSection.transform.rotation = Quaternion.identity;
+                    panelSection.transform.Rotate(90, 0, 0);
+
+
+                    panelSection.transform.position = new Vector3(
+                       MainCube.transform.position.x,
+                       panelSection.transform.position.y,
+                       MainCube.transform.position.z
+                       );
+                    
+
                     startPoint = MainCube.GetComponent<Renderer>().bounds.center.y
                        + MainCube.GetComponent<Renderer>().transform.localScale.y * 0.5f;
                 }
@@ -145,23 +180,13 @@ public class NewBehaviourScript : MonoBehaviour
                 break;
         }
 
-
-
-
-
-
-
-
-
-
         //удаленеи внутренностей обьекта
         for (int i = panelSection.transform.childCount - 1; i >= 0; i--)
             Destroy(panelSection.transform.GetChild(i).gameObject);
         panelSection.transform.DetachChildren();
 
         Helper.putBools(ref panelSection, true, 1f, panelSection.transform.position, Claster, SideSection.value);
-
-        //sharePoint = new List<GameObject>();
+        
         sharePoint.Clear();
         //нельзя копировать большой обьект поэтому копируются маленькие
         for (int i = 0; i < panelSection.transform.childCount; i++)
@@ -169,8 +194,7 @@ public class NewBehaviourScript : MonoBehaviour
             sharePoint.Add(panelSection.transform.GetChild(i).gameObject);
         }
 
-        ColoredBubls();
-
+        ValueChangeCheck();
     }
 
     void Start()
