@@ -4,7 +4,8 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
-
+using InsideFigures;
+using Assets;
 namespace Helpers
 {
     public class Helper
@@ -19,8 +20,16 @@ namespace Helpers
         /// <param name="opVal">Прозрачность секции</param>
         /// <param name="maxDist">Максимальная дистация </param>
         /// <param name="centerPanelSection">Позиция секции</param>
+        /// <param name="side">сторона движения</param>
         /// <returns>Возвращает секцию с шарами</returns>
-        public static GameObject createNewBoolsPanel(GameObject respawnPrefab, GameObject Claster, bool EnableClaster, float opVal, float maxDist, Vector3 centerPanelSection, int side = 0)
+        public static GameObject createNewBoolsPanel(
+            GameObject respawnPrefab, 
+            GameObject Claster, 
+            bool EnableClaster, 
+            float opVal, 
+            float maxDist, 
+            Vector3 centerPanelSection, 
+            int side = 0)
         {
             GameObject cyb = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
@@ -37,14 +46,28 @@ namespace Helpers
 
             Vector3 centerCube = respawnPrefab.transform.position;
 
-            for (int i = 0; i < cyb.transform.childCount; i++)
+            if (EnableClaster)
             {
-                // Color wqww = panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
-
-                // cyb.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = new Color(wqww.r, wqww.g, wqww.b, wqww.a);
-                cyb.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
-                    = getColor(centerCube, cyb.transform.GetChild(i).gameObject.transform.position, maxDist);
+                for (int i = 0; i < cyb.transform.childCount; i++)
+                {
+                    cyb.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+                        = getColor(centerCube, cyb.transform.GetChild(i).gameObject.transform.position, maxDist);
+                }
             }
+            else 
+            {
+                for (int i = 0; i < cyb.transform.childCount; i++)
+                {
+                    cyb.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+                        = new Color(0, 0, 0, 0); ;
+                }
+            }
+
+            //for (int i = 0; i < cyb.transform.childCount; i++)
+            //{
+            //    cyb.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+            //        = getColor(centerCube, cyb.transform.GetChild(i).gameObject.transform.position, maxDist);
+            //}
 
             return cyb;
 
@@ -60,6 +83,11 @@ namespace Helpers
         /// <param name="Claster">Обьект в который нужно вписать шары</param>
         public static void putBools(ref GameObject cyb, bool EnableClaster, float opVal, Vector3 centerPanelSection, GameObject Claster, int side = 0)
         {
+
+            InsideFigures.InsideFigure ClasterScript = Claster.GetComponent<InsideFigure>();
+
+          //  ClasterScript.GetComponent<Collider>().enabled = true;
+          //  ClasterScript.GetComponent<Collider>().enabled = false;
             for (int x = 0; x < 50; x++)
             {
                 for (int y = 0; y < 50; y++)
@@ -97,26 +125,41 @@ namespace Helpers
                             break;
                     }
 
-                    if (!EnableClaster)
-                    {
-                        if (!Claster.GetComponent<Renderer>().bounds.Contains(Dot))
-                            continue;
-                    }
-
                     GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    //if (!EnableClaster)
+                    //{
+                    //    //InsideFigures.InsideFigure.
 
-                    Rigidbody cylinderRigidbody = cylinder.AddComponent<Rigidbody>();
-                    cylinderRigidbody.isKinematic = true;
-                    cylinderRigidbody.useGravity = false;
+                    //    Rigidbody cylinderRigidbody = cylinder.AddComponent<Rigidbody>();
+                        
+                    //    cylinderRigidbody.isKinematic = true;
+                    //    cylinderRigidbody.useGravity = false;
+
+                    //   // Collider cylinderCollider = cylinder.AddComponent<SphereCollider>();
+                        
+                    //   // asd.TriggerList
+                    //    // Claster.GetComponent<TriggerList>()
+                        
+                    //    //if (!Claster.GetComponent<Renderer>().bounds.Contains(Dot))
+                    //    //    continue;
+                    //}
+
+
+                    cylinder.AddComponent<InsideFigure>();
+                 
+
                     //cylinderRigidbody.mass = 1;
 
 
                     cylinder.transform.position = Dot;
-
+                    
                     //(cylinder.GetComponent<Collider>() as SphereCollider).radius = 100f;
-                    cylinder.GetComponent<Renderer>().material.color = new Color(1, 0, 0, opVal);
-                    cylinder.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
 
+
+                   // cylinder.GetComponent<Renderer>().material.color = new Color(1, 0, 0, opVal);
+                    
+                    cylinder.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
+                    //cylinder.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
 
                     // cylinder.transform.localScale = new Vector3(cylinder.transform.localScale.x, cylinder.transform.localScale.y, 0.1f);
 
@@ -126,6 +169,22 @@ namespace Helpers
 
                 }
             }
+
+           
+
+
+            ////если не попало в кластер то сделать невидимым
+            //if (!EnableClaster)
+            //{
+            //    for (int i = 0; i < cyb.transform.childCount; i++)
+            //    {
+            //        //if (cyb.transform.GetChild(i).tag != "inside")
+            //        //{
+            //            cyb.transform.GetChild(i).GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
+            //       // }
+                    
+            //    }
+            //}
         }
 
         /// <summary>
