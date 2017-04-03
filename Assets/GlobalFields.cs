@@ -2,11 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using Assets;
-public class GlobalFields : MonoBehaviour
+namespace Assets
 {
-    //public List<SectionOfShape> Sections = new List<SectionOfShape>();
+    public class GlobalFields : MonoBehaviour
+    {
+        public List<SectionOfShape> Sections = new List<SectionOfShape>();
 
+        // Use this for initialization
+        void Start()
+        {
 
+        }
 
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    }
 }

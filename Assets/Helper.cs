@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
-using InsideFigures;
+
 using Assets;
 namespace Helpers
 {
@@ -84,7 +84,7 @@ namespace Helpers
         public static void putBools(ref GameObject cyb, bool EnableClaster, float opVal, Vector3 centerPanelSection, GameObject Claster, int side = 0)
         {
 
-            InsideFigures.InsideFigure ClasterScript = Claster.GetComponent<InsideFigure>();
+            //InsideFigures.InsideFigure ClasterScript = Claster.GetComponent<InsideFigure>();
 
           //  ClasterScript.GetComponent<Collider>().enabled = true;
           //  ClasterScript.GetComponent<Collider>().enabled = false;
@@ -146,7 +146,7 @@ namespace Helpers
 
 
                     cylinder.AddComponent<InsideFigure>();
-                 
+                   // cylinder.GetComponent<InsideFigure>().parent =  
 
                     //cylinderRigidbody.mass = 1;
 

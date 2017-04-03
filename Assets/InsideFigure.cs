@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using Helpers;
-using  Assets;
-namespace InsideFigures
+
+namespace Assets
 {
     public class InsideFigure : MonoBehaviour
     {
         //public List<Collider> TriggerList = new List<Collider>();
         //GameObject respawnPrefab;
-        SectionOfShape parent;
+        public SectionOfShape parent;
         // Use this for initialization
         void Start()
         {
@@ -24,8 +24,10 @@ namespace InsideFigures
             //other.tag = "inside";
             //TriggerList.Add(other);
 
-
-            this.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 1);
+            if (parent != null)
+            {
+                this.GetComponent<Renderer>().material.color = ((SectionOfShapeBubble)parent).getColorForCylinder(this.gameObject.transform.position);
+            }
             
             //other.GetComponent<Renderer>().material.color = new Color(1, 0, 0,1);
             

@@ -4,13 +4,11 @@ using System.Threading;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Helpers;
+using Assets;
 
 public class DropScript : MonoBehaviour
 {
-
-    List<GameObject> sections;
-    List<float> listOpacity;
-    List<int> listRotate; 
+     
     Dropdown Drop;  //выбор ранее созданной секции 
     Dropdown SideSection;  //выбор стороны поворота секции
     GameObject panelSection; // секция которая двигается 
@@ -23,6 +21,7 @@ public class DropScript : MonoBehaviour
     Scrollbar ScrollbarOpacity;
     Toggle ModeView;
     //получить все точки для анимации
+    List<SectionOfShape> Sections;
 
     List<GameObject> listOfSphere = new List<GameObject>();
     List<Vector3> listOfSphereVector3 = new List<Vector3>();
@@ -64,6 +63,10 @@ public class DropScript : MonoBehaviour
     void Start()
     {
         respawnPrefab = GameObject.FindWithTag("CenterAquo");
+
+        respawnPrefab.AddComponent<GlobalFields>();
+        Sections = respawnPrefab.GetComponent<GlobalFields>().Sections;
+        
         SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
         Drop = GameObject.FindWithTag("Drop").GetComponent<Dropdown>();
         EnableClaster = GameObject.FindWithTag("EnableClaster").GetComponent<Toggle>();
@@ -72,10 +75,6 @@ public class DropScript : MonoBehaviour
         ScrollbarOpacity = GameObject.FindWithTag("ScrollbarOpacity").GetComponent<Scrollbar>();
         AnimationPanel = GameObject.FindWithTag("AnimationPanel");
         ModeView = GameObject.FindWithTag("ModeView").GetComponent<Toggle>();
-
-        sections = new List<GameObject>();
-        listOpacity = new List<float>();
-        listRotate = new List<int>();
 
         centerCube = respawnPrefab.GetComponent<Renderer>().bounds.center;
 
@@ -108,53 +107,47 @@ public class DropScript : MonoBehaviour
     /// </summary>
     void changeMode()
     {
-        if (ModeView.isOn)
-        {
-            for (int i = 0; i < panelSection.transform.childCount; i++)
-            {
-                Color oldCol = panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
 
-                panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
-                    = new Color(oldCol.r, oldCol.g, oldCol.b, 1);
-            }
 
-            Color calCol = sections[Drop.value].GetComponent<Renderer>().material.color;
-            sections[Drop.value].GetComponent<Renderer>().material.color = new Color(calCol.r, calCol.g, calCol.b, 1);
-        }
-        else
-        {
-            for (int i = 0; i < panelSection.transform.childCount; i++)
-            {
-                Color oldCol = panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
+        //if (ModeView.isOn)
+        //{
+        //    for (int i = 0; i < panelSection.transform.childCount; i++)
+        //    {
+        //        Color oldCol = panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
 
-                panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
-                    = new Color(oldCol.r, oldCol.g, oldCol.b, 0);
-            }
+        //        panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+        //            = new Color(oldCol.r, oldCol.g, oldCol.b, 1);
+        //    }
 
-            foreach (GameObject item in sections)
-            {
-                Color oldCol = item.GetComponent<Renderer>().material.color;
-                item.GetComponent<Renderer>().material.color = new Color(oldCol.r, oldCol.g, oldCol.b, 0);
-            }
-            //panelSection
-        }
+        //    Color calCol = sections[Drop.value].GetComponent<Renderer>().material.color;
+        //    sections[Drop.value].GetComponent<Renderer>().material.color = new Color(calCol.r, calCol.g, calCol.b, 1);
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < panelSection.transform.childCount; i++)
+        //    {
+        //        Color oldCol = panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
+
+        //        panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+        //            = new Color(oldCol.r, oldCol.g, oldCol.b, 0);
+        //    }
+
+        //    foreach (GameObject item in sections)
+        //    {
+        //        Color oldCol = item.GetComponent<Renderer>().material.color;
+        //        item.GetComponent<Renderer>().material.color = new Color(oldCol.r, oldCol.g, oldCol.b, 0);
+        //    }
+        //    //panelSection
+        //}
     }
     /// <summary>
     /// Изменение прозрачности выделенной секции
     /// </summary>
     void ChangeOpasitySelectedSection()
     {
-        if (sections.Count != 0)
+        if (Sections.Count != 0)
         {
-            int selected = Drop.value;
-            float opVal = ScrollbarOpacity.value;
-            int count = sections[selected].transform.childCount;
-            for (int i = 0; i < count; i++)
-            {
-                Color oldColor = sections[selected].transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
-                sections[selected].transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
-                    = new Color(oldColor.r, oldColor.g, oldColor.b, opVal);
-            }
+            Sections[Drop.value].Opacity = ScrollbarOpacity.value;
         }
     }
     /// <summary>
@@ -162,30 +155,17 @@ public class DropScript : MonoBehaviour
     /// </summary>
     private void ToggleEnableClaster()
     {
-        List<Vector3> positionSections = new List<Vector3>();
-
-        foreach (GameObject item in sections)
+        // добавить условие что только если включен режим пузырей
+        if (true)
         {
-            positionSections.Add(item.transform.position);
-            Destroy(item);
+            foreach (SectionOfShapeBubble item in Sections)
+            {
+                //positionSections.Add(item.transform.position);
+                Destroy(item.Section);
+                item.EnableClaster = EnableClaster.isOn;
+                item.CreateBubbles();
+            }
         }
-
-        sections.Clear();
-
-        for (int i = 0; i < positionSections.Count; i++)
-        {
-            sections.Add(Helper.createNewBoolsPanel
-            (
-                respawnPrefab,
-                Claster,
-                EnableClaster.isOn,
-                listOpacity[i],
-                maxDist,
-                positionSections[i], 
-                listRotate[i]
-            ));
-        }
-
     }
 
     private void SideSectionChange() 
@@ -199,129 +179,45 @@ public class DropScript : MonoBehaviour
     /// </summary>
     private void myDropdownValueChangedHandler()
     {
-        //полная прозрачность для не выделенных
-        foreach (var item in sections)
-        {
-            item.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
-        }
+        ////полная прозрачность для не выделенных
+        //foreach (var item in sections)
+        //{
+        //    item.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
+        //}
 
-        //режима просмотра
-        if (ModeView.isOn)
-        {
-            sections[Drop.value].GetComponent<Renderer>().material.color = new Color(0, 1, 0, 0.8f);
-        }
-        // sections.RemoveAt(Drop.value);
+        ////режима просмотра
+        //if (ModeView.isOn)
+        //{
+        //    sections[Drop.value].GetComponent<Renderer>().material.color = new Color(0, 1, 0, 0.8f);
+        //}
+        //// sections.RemoveAt(Drop.value);
 
 
-        // Debug.Log("selected: " + target.value);
+        //// Debug.Log("selected: " + target.value);
     }
-
-    //public GameObject kreate(Vector3 cenet, float opVal)
-    //{
-    //    GameObject cyb = GameObject.CreatePrimitive(PrimitiveType.Cube);
-
-    //    //Vector3 centerPanelSection = panelSection.GetComponent<Renderer>().bounds.center;
-    //    Vector3 centerPanelSection = cenet;
-    //    cyb.GetComponent<Renderer>().transform.position = centerPanelSection;
-    //    // cyb.GetComponent<Renderer>().transform.localScale = panelSection.GetComponent<Renderer>().transform.lossyScale;
-
-    //    cyb.GetComponent<Renderer>().material.color = new Color(255, 0, 0, 0);
-    //    cyb.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
-    //    cyb.transform.localScale = new Vector3(50, 50, 2);
-
-    //    for (int x = 0; x < 50; x++)
-    //    {
-    //        for (int y = 0; y < 50; y++)
-    //        {
-    //            Vector3 Dot = new Vector3(
-    //                x + centerPanelSection.x - (50 * 0.5f),
-    //                y + centerPanelSection.y - (50 * 0.5f),
-    //                centerPanelSection.z);
-
-    //            // здесь использование тугле
-    //            //(!EnableClaster.isOn) &&
-
-    //            if (!EnableClaster.isOn)
-    //            {
-    //                if (!Claster.GetComponent<Renderer>().bounds.Contains(Dot))
-    //                    continue;
-    //            }
-
-
-    //            GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-    //            cylinder.transform.position = Dot;
-
-    //            //(cylinder.GetComponent<Collider>() as SphereCollider).radius = 100f;
-    //            cylinder.GetComponent<Renderer>().material.color = new Color(1, 0, 0, opVal);
-    //            cylinder.GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
-
-
-    //            // cylinder.transform.localScale = new Vector3(cylinder.transform.localScale.x, cylinder.transform.localScale.y, 0.1f);
-    //            cylinder.transform.parent = cyb.transform;
-    //            //cylinder.transform.parent = panelSection.transform;
-    //            //cylinder.transform.localScale = new Vector3(1, 1, 1);
-
-    //        }
-    //    }
-
-
-    //    for (int i = 0; i < cyb.transform.childCount; i++)
-    //    {
-    //        // Color wqww = panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
-
-    //        // cyb.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = new Color(wqww.r, wqww.g, wqww.b, wqww.a);
-    //        cyb.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
-    //            = getColor(cyb.transform.GetChild(i).gameObject.transform.position);
-    //    }
-
-    //    return cyb;
-
-    //}
-
 
     /// <summary>
     /// Добавление новой секции
     /// </summary>
     public void AddNewOption()
     {
-        //ScrollbarOpacity.value;
 
-        sections.Add(Helper.createNewBoolsPanel
-            (
-                respawnPrefab,
-                Claster,
-                EnableClaster.isOn,
-                ScrollbarOpacity.value,
-                maxDist,
+        Sections.Add(new SectionOfShapeBubble(respawnPrefab,
+                Claster, 
                 panelSection.GetComponent<Renderer>().bounds.center, 
-                SideSection.value
-            ));
-      
+                SideSection.value, 
+                EnableClaster.isOn, 
+                ScrollbarOpacity.value));
 
-        //sections.Add(kreate(panelSection.GetComponent<Renderer>().bounds.center, ScrollbarOpacity.value));
-        listOpacity.Add(ScrollbarOpacity.value);
-        listRotate.Add(SideSection.value);
-        //        sections.Add(Instantiate(panelSection));
         Drop.options.Add(new Dropdown.OptionData("new text"));
-
-        // Drop.transform.GetChild
-
-        //получить координаты панели
-        //добавить в список контролла и свой список
-
-       // Debug.Log("new text");
     }
     /// <summary>
     /// Удаление секции 
     /// </summary>
     public void DeleteOption()
     {
-        Drop.options.RemoveAt(Drop.value);
-
-        Destroy(sections[Drop.value]);
-        sections.RemoveAt(Drop.value);
-        listOpacity.RemoveAt(Drop.value);
-        listRotate.RemoveAt(Drop.value);
+        Destroy(Sections[Drop.value].Section);
+        Sections.RemoveAt(Drop.value);
     }
 
     public void Animation() 
@@ -330,18 +226,18 @@ public class DropScript : MonoBehaviour
 
        //// Update();
        // получить все точки
-        listOfSphere = new List<GameObject>();
+        //listOfSphere = new List<GameObject>();
 
-        foreach (GameObject item in sections)
-        {
-            for (int i = 0; i < item.transform.childCount; i++)
-            {
-                //panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+        //foreach (GameObject item in sections)
+        //{
+        //    for (int i = 0; i < item.transform.childCount; i++)
+        //    {
+        //        //panelSection.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
 
-                listOfSphere.Add(item.transform.GetChild(i).gameObject);
-                listOfSphereVector3.Add(item.transform.GetChild(i).gameObject.transform.localPosition);
-            }
-        }
+        //        listOfSphere.Add(item.transform.GetChild(i).gameObject);
+        //        listOfSphereVector3.Add(item.transform.GetChild(i).gameObject.transform.localPosition);
+        //    }
+        //}
 
 
 
