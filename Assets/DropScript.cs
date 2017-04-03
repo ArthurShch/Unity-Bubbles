@@ -22,6 +22,7 @@ public class DropScript : MonoBehaviour
     Toggle ModeView;
     //получить все точки для анимации
     List<SectionOfShape> Sections;
+    SectionOfShape MovingSections;
 
     List<GameObject> listOfSphere = new List<GameObject>();
     List<Vector3> listOfSphereVector3 = new List<Vector3>();
@@ -38,35 +39,17 @@ public class DropScript : MonoBehaviour
        
         //((GameObject)obj).gameObject.GetComponent<Renderer>().material.color = new Color(1, 0, 0, param);
     }
-   
-    
 
-    //public  Drop;
-    // Use this for initialization
-
-    //Color getColor(Vector3 positionShare)
-    //{
-
-
-    //    float dist = maxDist - Vector3.Distance(centerCube, positionShare);
-
-    //    dist = dist < 0 ? 0 : dist;
-
-    //    float percentRED = dist / (maxDist / 100);
-    //    float www = (100 - percentRED) / 100;
-
-    //    Color result = new Color(1, www, www, 1);
-
-    //    return result;
-    //}
 
     void Start()
     {
         respawnPrefab = GameObject.FindWithTag("CenterAquo");
 
-        respawnPrefab.AddComponent<GlobalFields>();
+        //respawnPrefab.AddComponent<GlobalFields>();
+        //получение глобальной перемонной. список всех срезов
         Sections = respawnPrefab.GetComponent<GlobalFields>().Sections;
         
+ 
         SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
         Drop = GameObject.FindWithTag("Drop").GetComponent<Dropdown>();
         EnableClaster = GameObject.FindWithTag("EnableClaster").GetComponent<Toggle>();
@@ -203,9 +186,16 @@ public class DropScript : MonoBehaviour
     public void AddNewOption()
     {
 
+        //сохранение ссылки на обьект при первом добовлении
+        if (MovingSections == null)
+        {
+            MovingSections = respawnPrefab.GetComponent<GlobalFields>().MovingSection;
+        }
+
         Sections.Add(new SectionOfShapeBubble(respawnPrefab,
-                Claster, 
-                panelSection.GetComponent<Renderer>().bounds.center, 
+                Claster,
+                MovingSections.CenterPanelSection,
+                //panelSection.GetComponent<Renderer>().bounds.center, 
                 SideSection.value, 
                 EnableClaster.isOn, 
                 ScrollbarOpacity.value));

@@ -35,7 +35,10 @@ namespace Assets
             //  Debug.Log("add new obj");
 
         }
-
+        void OnTriggerExit(Collider other)
+        {
+            this.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
+        }
         //called when something exits the trigger
         //void OnTriggerExit(Collider other)
         //{

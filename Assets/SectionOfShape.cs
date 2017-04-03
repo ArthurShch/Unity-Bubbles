@@ -26,7 +26,7 @@ namespace Assets
         float StartPoint;
         Vector3 _centerPanelSection;
         //Vector3 CenterPanelSection;
-        Vector3 CenterPanelSection
+        public Vector3 CenterPanelSection
         {
             get
             {
@@ -189,6 +189,8 @@ namespace Assets
 
     public class SectionOfShapeBubble : SectionOfShape
     {
+        float MaxElements = 50;
+
         public SectionOfShapeBubble(
             GameObject MainCube,
             GameObject Claster,
@@ -256,66 +258,38 @@ namespace Assets
             return result;
         }
 
-
-        //public static Color getColor(Vector3 centerCube, Vector3 positionShare, float maxDist)
-        //{
-        //    float dist = maxDist - Vector3.Distance(centerCube, positionShare);
-
-        //    dist = dist < 0 ? 0 : dist;
-
-        //    float percentRED = dist / (maxDist / 100);
-        //    float www = (100 - percentRED) / 100;
-
-        //    Color result = new Color(1, www, www, 1);
-
-        //    return result;
-        //}
-
         public override void SetPositionOffset(float offset) 
         {
             base.SetPositionOffset(offset);
-            SetColorBubbles();
+            if (EnableClaster)
+            {
+                SetColorBubbles();
+            }
         }
 
         void SetColorBubbles()
         {
 
-
             for (int i = 0; i < Section.transform.childCount; i++)
-            {
-                //float dist = maxDist - Vector3.Distance(MainCube.transform.position, Section.transform.GetChild(i).gameObject.transform.position);
-
+            {               
                 Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
                     = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
-                //dist = dist < 0 ? 0 : dist;
-
-                //float percentRED = dist / (maxDist / 100);
-                //float www = (100 - percentRED) / 100;
-
-                //    Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = new Color(1, www, www, _opacity);
             }
-
-
-            //for (int i = 0; i < Section.transform.childCount; i++)
-            //{
-            //    float dist = maxDist - Vector3.Distance(MainCube.transform.position, Section.transform.GetChild(i).gameObject.transform.position);
-            //    dist = dist < 0 ? 0 : dist;
-
-            //    float percentRED = dist / (maxDist / 100);
-            //    float www = (100 - percentRED) / 100;
-
-            //    Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = new Color(1, www, www, _opacity);
-            //}
         }
 
 
 
         void putBools()
         {
+            
+            float CountElements = 21 -2;
+
+            float factor = MaxElements / CountElements;  
+
             Vector3 centerPanelSection = Section.transform.position;
-            for (int x = 0; x < 50; x++)
+            for (float x = 0; x <= CountElements; x++)
             {
-                for (int y = 0; y < 50; y++)
+                for (float y = 0; y <= CountElements; y++)
                 {
                     Vector3 Dot = new Vector3();
                     switch (_sideRotate)
@@ -323,8 +297,8 @@ namespace Assets
                         case 0:
                             {
                                 Dot = new Vector3(
-                       x + centerPanelSection.x - (50 * 0.5f),
-                       y + centerPanelSection.y - (50 * 0.5f),
+                       x * factor + centerPanelSection.x - (MaxElements * 0.5f),
+                       y * factor + centerPanelSection.y - (MaxElements * 0.5f),
                        centerPanelSection.z);
 
                             }
@@ -333,17 +307,17 @@ namespace Assets
                             {
                                 Dot = new Vector3(
                      centerPanelSection.x,
-                     x + centerPanelSection.y - (50 * 0.5f),
-                     y + centerPanelSection.z - (50 * 0.5f));
+                     x * factor + centerPanelSection.y - (MaxElements * 0.5f),
+                     y * factor + centerPanelSection.z - (MaxElements * 0.5f));
 
                             }
                             break;
                         case 2:
                             {
                                 Dot = new Vector3(
-                     x + centerPanelSection.x - (50 * 0.5f),
+                     x * factor + centerPanelSection.x - (MaxElements * 0.5f),
                      centerPanelSection.y,
-                     y + centerPanelSection.z - (50 * 0.5f));
+                     y * factor + centerPanelSection.z - (MaxElements * 0.5f));
                             }
                             break;
                         default:
@@ -359,51 +333,9 @@ namespace Assets
                         cylinder.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
                         cylinder.AddComponent<InsideFigure>().parent = this;
                     }
-
-                    //if (!EnableClaster)
-                    //{
-                    //    //InsideFigures.InsideFigure.
-
-                    //    Rigidbody cylinderRigidbody = cylinder.AddComponent<Rigidbody>();
-                    //    cylinderRigidbody.isKinematic = true;
-                    //    cylinderRigidbody.useGravity = false;
-
-                    //    // Collider cylinderCollider = cylinder.AddComponent<SphereCollider>();
-
-                    //    // asd.TriggerList
-                    //    // Claster.GetComponent<TriggerList>()
-
-                    //    //if (!Claster.GetComponent<Renderer>().bounds.Contains(Dot))
-                    //    //    continue;
-                    //}
-
-
-
-
-
-                    //cylinderRigidbody.mass = 1;
-
-
-
-
-                    //(cylinder.GetComponent<Collider>() as SphereCollider).radius = 100f;
-
-
-                    // cylinder.GetComponent<Renderer>().material.color = new Color(1, 0, 0, opVal);
-
-
-                    //cylinder.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
-
-                    // cylinder.transform.localScale = new Vector3(cylinder.transform.localScale.x, cylinder.transform.localScale.y, 0.1f);
-
-
-                    //cylinder.transform.parent = panelSection.transform;
-                    //cylinder.transform.localScale = new Vector3(1, 1, 1);
-
                 }
             }
         }
-
     }
 
     //class SectionOfShapContourCircle : SectionOfShape

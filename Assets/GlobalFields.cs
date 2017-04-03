@@ -7,6 +7,7 @@ namespace Assets
     public class GlobalFields : MonoBehaviour
     {
         public List<SectionOfShape> Sections = new List<SectionOfShape>();
+        public SectionOfShape MovingSection;
 
         // Use this for initialization
         void Start()

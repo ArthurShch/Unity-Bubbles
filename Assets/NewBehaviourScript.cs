@@ -14,7 +14,7 @@ public class NewBehaviourScript : MonoBehaviour
     GameObject Claster;
     Vector3 centerCube;
     Dropdown SideSection;  //выбор стороны поворота секции
-
+    Toggle EnableClaster;
     List<GameObject> sharePoint;// секция которая двигается
     float startPoint;
     float maxDist;
@@ -61,14 +61,28 @@ public class NewBehaviourScript : MonoBehaviour
         MovingSection.SideRotate = SideSection.value;
     }
 
+    public void ToggleEnableClaster() 
+    {
+        //MovingSection.EnableClaster = EnableClaster.isOn;
+        Destroy(MovingSection.Section);
+        MovingSection.EnableClaster = EnableClaster.isOn;
+        MovingSection.Create();
+        ((SectionOfShapeBubble)MovingSection).CreateBubbles();
+    }
+
     void Start()
     {
 
         cam_holder = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
+        EnableClaster = GameObject.FindWithTag("EnableClaster").GetComponent<Toggle>();
+        EnableClaster.onValueChanged.AddListener(delegate { ToggleEnableClaster(); });
         SideSection.onValueChanged.AddListener(delegate { SideSectionChange(); });
 
         MainCube = GameObject.FindWithTag("CenterAquo");
+        //получение глобальной перемонной. движущийся панели
+        //MovingSection = MainCube.GetComponent<GlobalFields>().MovingSection;
+
         MainCube.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
         centerCube = MainCube.GetComponent<Renderer>().bounds.center;
 
@@ -87,8 +101,10 @@ public class NewBehaviourScript : MonoBehaviour
 
         Claster = GameObject.FindWithTag("Claster");
         Claster.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
+        
 
         MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1);
+        MainCube.GetComponent<GlobalFields>().MovingSection = MovingSection;
         ValueChangeCheck();
         SideSectionChange();
 
