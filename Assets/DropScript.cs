@@ -163,6 +163,7 @@ public class DropScript : MonoBehaviour
                 //positionSections.Add(item.transform.position);
                 Destroy(item.Section);
                 item.EnableClaster = EnableClaster.isOn;
+                item.Create();
                 item.CreateBubbles();
             }
         }

@@ -156,7 +156,7 @@ namespace Assets
         }
         protected virtual void OpacityChane() { }
 
-        protected void Create()
+        public void Create()
         {
             Section = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Section.transform.localScale = new Vector3(50, 50, 2);
@@ -233,7 +233,7 @@ namespace Assets
 
         public void CreateBubbles()
         {
-            Create();
+            //Create();
             putBools();
             if (EnableClaster)
             {
