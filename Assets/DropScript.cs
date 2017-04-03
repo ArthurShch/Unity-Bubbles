@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using Helpers;
+
 using Assets;
 
 public class DropScript : MonoBehaviour
