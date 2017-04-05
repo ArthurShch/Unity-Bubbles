@@ -190,7 +190,7 @@ namespace Assets
     public class SectionOfShapeBubble : SectionOfShape
     {
         float MaxElements = 50;
-
+        public float CountBubles = 51;
         public SectionOfShapeBubble(
             GameObject MainCube,
             GameObject Claster,
@@ -253,7 +253,8 @@ namespace Assets
             float percentRED = dist / (maxDist / 100);
             float www = (100 - percentRED) / 100;
 
-            Color result = new Color(1, www, www, Opacity);
+            //Color result = new Color(1, www, www, Opacity);
+            Color result = new Color(1 - www, 0, www, Opacity);
 
             return result;
         }
@@ -261,20 +262,35 @@ namespace Assets
         public override void SetPositionOffset(float offset) 
         {
             base.SetPositionOffset(offset);
-            if (EnableClaster)
-            {
+            //if (EnableClaster)
+            //{
                 SetColorBubbles();
-            }
+            //}
         }
 
         void SetColorBubbles()
         {
-
-            for (int i = 0; i < Section.transform.childCount; i++)
-            {               
-                Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
-                    = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
+            if (EnableClaster)
+            {
+                for (int i = 0; i < Section.transform.childCount; i++)
+                {
+                    Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+                        = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
+                }
             }
+            else
+            {
+                for (int i = 0; i < Section.transform.childCount; i++)
+                {
+                    if (Section.transform.GetChild(i).gameObject.GetComponent<InsideFigure>().IsInside)
+                    {
+                        Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+                        = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
+                    }
+                }   
+            }
+
+            
         }
 
 
@@ -282,7 +298,8 @@ namespace Assets
         void putBools()
         {
             
-            float CountElements = 21 -2;
+
+            float CountElements = CountBubles - 2;
 
             float factor = MaxElements / CountElements;  
 

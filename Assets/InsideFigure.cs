@@ -10,6 +10,8 @@ namespace Assets
         //public List<Collider> TriggerList = new List<Collider>();
         //GameObject respawnPrefab;
         public SectionOfShape parent;
+
+        public bool IsInside = false;
         // Use this for initialization
         void Start()
         {
@@ -26,6 +28,7 @@ namespace Assets
 
             if (parent != null)
             {
+                IsInside = true;
                 this.GetComponent<Renderer>().material.color = ((SectionOfShapeBubble)parent).getColorForCylinder(this.gameObject.transform.position);
             }
             
@@ -37,6 +40,7 @@ namespace Assets
         }
         void OnTriggerExit(Collider other)
         {
+            IsInside = false;
             this.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
         }
         //called when something exits the trigger

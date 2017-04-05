@@ -23,7 +23,8 @@ public class DropScript : MonoBehaviour
     //получить все точки для анимации
     List<SectionOfShape> Sections;
     SectionOfShape MovingSections;
-
+    //слайдер количества точек
+    Slider SliderOfCountElements;
     List<GameObject> listOfSphere = new List<GameObject>();
     List<Vector3> listOfSphereVector3 = new List<Vector3>();
     Timer timer;
@@ -40,6 +41,16 @@ public class DropScript : MonoBehaviour
         //((GameObject)obj).gameObject.GetComponent<Renderer>().material.color = new Color(1, 0, 0, param);
     }
 
+    public void ChangeCountElements() 
+    {
+        foreach (SectionOfShapeBubble item in Sections)
+        {
+            item.CountBubles = SliderOfCountElements.value;
+            Destroy(item.Section);
+            item.Create();
+            item.CreateBubbles();
+        }
+    }
 
     void Start()
     {
@@ -48,8 +59,9 @@ public class DropScript : MonoBehaviour
         //respawnPrefab.AddComponent<GlobalFields>();
         //получение глобальной перемонной. список всех срезов
         Sections = respawnPrefab.GetComponent<GlobalFields>().Sections;
-        
- 
+
+
+        SliderOfCountElements = GameObject.FindWithTag("SliderOfCountElements").GetComponent<Slider>();
         SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
         Drop = GameObject.FindWithTag("Drop").GetComponent<Dropdown>();
         EnableClaster = GameObject.FindWithTag("EnableClaster").GetComponent<Toggle>();
@@ -58,6 +70,8 @@ public class DropScript : MonoBehaviour
         ScrollbarOpacity = GameObject.FindWithTag("ScrollbarOpacity").GetComponent<Scrollbar>();
         AnimationPanel = GameObject.FindWithTag("AnimationPanel");
         ModeView = GameObject.FindWithTag("ModeView").GetComponent<Toggle>();
+
+
 
         centerCube = respawnPrefab.GetComponent<Renderer>().bounds.center;
 
@@ -69,6 +83,7 @@ public class DropScript : MonoBehaviour
 
         maxDist = Vector3.Distance(VMaxDist, centerCube);
 
+        SliderOfCountElements.onValueChanged.AddListener(delegate { ChangeCountElements(); });
         SideSection.onValueChanged.AddListener(delegate { SideSectionChange(); });
         Drop.onValueChanged.AddListener(delegate { myDropdownValueChangedHandler(); });
         EnableClaster.onValueChanged.AddListener(delegate { ToggleEnableClaster(); });
@@ -90,6 +105,10 @@ public class DropScript : MonoBehaviour
     /// </summary>
     void changeMode()
     {
+        if (ModeView.isOn)
+        {
+
+        }
 
 
         //if (ModeView.isOn)

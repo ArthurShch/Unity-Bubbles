@@ -20,7 +20,8 @@ public class NewBehaviourScript : MonoBehaviour
     float maxDist;
 
     SectionOfShape MovingSection;
-
+    //слайдер количества точек
+    Slider SliderOfCountElements;
 
     //устранить повторение кода 
     
@@ -70,12 +71,22 @@ public class NewBehaviourScript : MonoBehaviour
         ((SectionOfShapeBubble)MovingSection).CreateBubbles();
     }
 
+    public void ChangeCountElements()
+    {
+        ((SectionOfShapeBubble)MovingSection).CountBubles = SliderOfCountElements.value;
+        Destroy(MovingSection.Section);
+        MovingSection.Create();
+        ((SectionOfShapeBubble)MovingSection).CreateBubbles();
+    }
+
     void Start()
     {
 
         cam_holder = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
         EnableClaster = GameObject.FindWithTag("EnableClaster").GetComponent<Toggle>();
+        SliderOfCountElements = GameObject.FindWithTag("SliderOfCountElements").GetComponent<Slider>();
+        SliderOfCountElements.onValueChanged.AddListener(delegate { ChangeCountElements(); });
         EnableClaster.onValueChanged.AddListener(delegate { ToggleEnableClaster(); });
         SideSection.onValueChanged.AddListener(delegate { SideSectionChange(); });
 
