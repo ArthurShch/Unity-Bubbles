@@ -236,9 +236,19 @@ public class DropScript : MonoBehaviour
 
        //// Update();
        // получить все точки
-        //listOfSphere = new List<GameObject>();
+        listOfSphere = new List<GameObject>();
 
-        //foreach (GameObject item in sections)
+        foreach (SectionOfShapeBubble item in Sections)
+        {
+            for (int i = 0; i < item.Section.transform.childCount; i++)
+            {
+
+                item.Section.transform.GetChild(i).gameObject.AddComponent<AnimationOpacitySphere>();
+               // listOfSphere.Add()
+            }
+        }
+
+        //foreach (GameObject item in Sections.)
         //{
         //    for (int i = 0; i < item.transform.childCount; i++)
         //    {

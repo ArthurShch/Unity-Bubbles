@@ -350,6 +350,28 @@ namespace Assets
                         cylinder.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
                         cylinder.AddComponent<InsideFigure>().parent = this;
                     }
+
+                    cylinder.AddComponent<ParticleSystem>();
+                    var ps = cylinder.GetComponent<ParticleSystem>();
+                    var sh = ps.shape;
+                    var colorOverLife = ps.colorOverLifetime;                    
+                    var em = ps.emission;
+
+                    sh.enabled = false;
+                    em.rate = 20;
+                    ps.startSpeed = 0;
+                    ps.time = 10;
+                    ps.startSize = 2;
+                    ps.simulationSpace = ParticleSystemSimulationSpace.World;
+                    ps.playbackSpeed = 5;
+                    //colorOverLife.color = 
+
+                    //ps.;
+
+                    
+
+                    
+
                 }
             }
         }

@@ -15,10 +15,13 @@ namespace Assets
         // Use this for initialization
         void Start()
         {
+            
+
             //this.GetComponent<Collider>().enabled = false;
            // respawnPrefab = GameObject.FindWithTag("CenterAquo");
         }
 
+        
 
 
         void OnTriggerEnter(Collider other)
