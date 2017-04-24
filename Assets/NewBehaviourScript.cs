@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 
 using Assets;
+using UnityEditor;
 public class NewBehaviourScript : MonoBehaviour
 {
     GameObject panelSection;
@@ -79,8 +80,13 @@ public class NewBehaviourScript : MonoBehaviour
         ((SectionOfShapeBubble)MovingSection).CreateBubbles();
     }
 
+    
     void Start()
     {
+
+        //GameObject t = AssetDatabase.LoadAssetAtPath("Assets/untitled.fbx", typeof(GameObject)) as GameObject;
+        //Instantiate(t);
+
 
         cam_holder = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
@@ -112,9 +118,14 @@ public class NewBehaviourScript : MonoBehaviour
 
         Claster = GameObject.FindWithTag("Claster");
         Claster.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
-        
+
+
+
 
         MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1);
+        //MovingSection = new SectionOfShapContourCircle(MainCube, Claster, centerCube, SideSection.value, true);
+        //Instantiate(MovingSection.Section,MovingSection.CenterPanelSection, MovingSection.Section.transform.rotation);
+
         MainCube.GetComponent<GlobalFields>().MovingSection = MovingSection;
         ValueChangeCheck();
         SideSectionChange();

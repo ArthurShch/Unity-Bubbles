@@ -61,8 +61,55 @@ namespace Assets
         // Update is called once per frame
         void Update()
         {
+            StartCoroutine(coor(this.transform.position));
+        }
+
+        IEnumerator coorDel(GameObject delobj)
+        {
+            yield return new WaitForSeconds(1);
+
+
+            Destroy(delobj);
+        }
+
+        IEnumerator coor(Vector3 posSphere)
+        {
+            GameObject nG = new GameObject();
+
+            nG.AddComponent<ParticleSystem>();
+
+            var ps = nG.GetComponent<ParticleSystem>();
+
+
+            //ParticleSystem ps = new ParticleSystem();
+            //ps.transform.position = Section.transform.GetChild(i).gameObject.transform.position;
+            var sh = ps.shape;
+
+            var em = ps.emission;
+            var colorModule = ps.colorOverLifetime;
+
+            ps.loop = true;
+
+            colorModule.enabled = true;
+            sh.enabled = false;
+            em.rate = 20;
+            ps.startSpeed = 0;
+            ps.time = 10;
+            ps.startSize = 2;
+            ps.simulationSpace = ParticleSystemSimulationSpace.World;
+            ps.playbackSpeed = 5;
+
+            colorModule.color = new Color(1, 0, 0);
+
+            StartCoroutine (coorDel(nG));
+            
+            yield return null;
+
+
+
 
         }
+
     }
 
 }

@@ -5,10 +5,11 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
 
 namespace Assets
 {
-    public abstract class SectionOfShape
+    public abstract class SectionOfShape 
     {
         //прозрачность обьекта
         private float _opacity = 1;
@@ -37,12 +38,12 @@ namespace Assets
             {
                 if (Section != null)
                 {
-                    Section.transform.position = value;                    
+                    Section.transform.position = value;
                 }
                 _centerPanelSection = value;
             }
         }
-        
+
         public float Opacity
         {
             get { return _opacity; }
@@ -58,7 +59,7 @@ namespace Assets
             set
             {
                 _sideRotate = value;
-                 SideRotateChange();
+                SideRotateChange();
             }
         }
         public virtual void SetPositionOffset(float offset)
@@ -175,9 +176,9 @@ namespace Assets
             _sideRotate = sideRotate;
             CenterPanelSection = centerPanelSection;
             Create();
-            
 
-            
+
+
 
             VMaxDist = new Vector3(
             MainCube.GetComponent<Renderer>().bounds.center.x + MainCube.GetComponent<Renderer>().transform.localScale.x * 0.5f,
@@ -254,17 +255,18 @@ namespace Assets
             float www = (100 - percentRED) / 100;
 
             //Color result = new Color(1, www, www, Opacity);
-            Color result = new Color(1 - www, 0, www, Opacity);
+           // Color result = new Color(1 - www, 0, www, Opacity);
+            Color result = new Color(www, 0, 1 - www, Opacity);
 
             return result;
         }
 
-        public override void SetPositionOffset(float offset) 
+        public override void SetPositionOffset(float offset)
         {
             base.SetPositionOffset(offset);
             //if (EnableClaster)
             //{
-                SetColorBubbles();
+            SetColorBubbles();
             //}
         }
 
@@ -274,8 +276,19 @@ namespace Assets
             {
                 for (int i = 0; i < Section.transform.childCount; i++)
                 {
+                    Color Ncolor = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
+
                     Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
-                        = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
+                        = Ncolor;
+
+                    var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
+
+                    var colorModule = ps.colorOverLifetime;
+
+                    colorModule.color = Ncolor;
+
+                    ParticleSystem sdsd = new ParticleSystem();
+
                 }
             }
             else
@@ -287,21 +300,21 @@ namespace Assets
                         Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
                         = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
                     }
-                }   
+                }
             }
 
-            
+
         }
 
 
 
         void putBools()
         {
-            
+
 
             float CountElements = CountBubles - 2;
 
-            float factor = MaxElements / CountElements;  
+            float factor = MaxElements / CountElements;
 
             Vector3 centerPanelSection = Section.transform.position;
             for (float x = 0; x <= CountElements; x++)
@@ -352,11 +365,15 @@ namespace Assets
                     }
 
                     cylinder.AddComponent<ParticleSystem>();
+                    
                     var ps = cylinder.GetComponent<ParticleSystem>();
                     var sh = ps.shape;
-                    var colorOverLife = ps.colorOverLifetime;                    
+                    var colorOverLife = ps.colorOverLifetime;
                     var em = ps.emission;
+                    var colorModule = ps.colorOverLifetime;
 
+                    
+                    colorModule.enabled = true;
                     sh.enabled = false;
                     em.rate = 20;
                     ps.startSpeed = 0;
@@ -364,21 +381,48 @@ namespace Assets
                     ps.startSize = 2;
                     ps.simulationSpace = ParticleSystemSimulationSpace.World;
                     ps.playbackSpeed = 5;
+    
+                    colorModule.color = new Color(1, 0, 0);
+                    
+                    
+                    
                     //colorOverLife.color = 
 
                     //ps.;
 
-                    
 
-                    
+
+
 
                 }
             }
         }
     }
 
-    //class SectionOfShapContourCircle : SectionOfShape
-    //{
+    class SectionOfShapContourCircle : SectionOfShape
+    {
+        public SectionOfShapContourCircle(
+            GameObject MainCube,
+            GameObject Claster,
+            Vector3 centerPanelSection,
+            int sideRotate,
+            bool EnableClaster)
+            : base(MainCube, Claster, sideRotate, centerPanelSection, EnableClaster)
+        {
+            maxDist = Vector3.Distance(VMaxDist, MainCube.GetComponent<Renderer>().bounds.center);
+            
+            GameObject SectionADdd = AssetDatabase.LoadAssetAtPath("Assets/untitled.fbx", typeof(GameObject)) as GameObject;
+            //MonoBehaviour.Instantiate(;
+            MonoBehaviour.Instantiate(SectionADdd, Section.transform,false);
+            
+            //SectionADdd.transform.parent = Section.transform;
 
-    //}
+            //CreateBubbles();
+
+            // _sideRotate = sideRotate;
+
+            //_opacity
+
+        }
+    }
 }
