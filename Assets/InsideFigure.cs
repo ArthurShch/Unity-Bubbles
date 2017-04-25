@@ -45,6 +45,9 @@ namespace Assets
         {
             IsInside = false;
             this.GetComponent<Renderer>().material.color = new Color(1, 0, 0, 0);
+
+
+
         }
         //called when something exits the trigger
         //void OnTriggerExit(Collider other)
@@ -61,7 +64,7 @@ namespace Assets
         // Update is called once per frame
         void Update()
         {
-            StartCoroutine(coor(this.transform.position));
+            //StartCoroutine(coor(this.transform.position));
         }
 
         IEnumerator coorDel(GameObject delobj)

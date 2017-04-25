@@ -98,7 +98,13 @@ public class DropScript : MonoBehaviour
         //Animation();
     }
 
-  
+    /// <summary>
+    /// изменить содержимое движищиейся секции и созданных секций
+    /// </summary>
+    void changeContentSections() 
+    {
+
+    }
 
     /// <summary>
     /// Изменение режима просмотра

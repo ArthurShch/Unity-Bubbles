@@ -22,6 +22,7 @@ namespace Assets
         public bool EnableClaster;
         public Vector3 VMaxDist;
         public float maxDist;
+        
 
         //точка начала перемещение
         float StartPoint;
@@ -177,14 +178,19 @@ namespace Assets
             CenterPanelSection = centerPanelSection;
             Create();
 
-
-
-
             VMaxDist = new Vector3(
             MainCube.GetComponent<Renderer>().bounds.center.x + MainCube.GetComponent<Renderer>().transform.localScale.x * 0.5f,
             MainCube.GetComponent<Renderer>().bounds.center.y + MainCube.GetComponent<Renderer>().transform.localScale.y * 0.5f,
             MainCube.GetComponent<Renderer>().bounds.center.z + MainCube.GetComponent<Renderer>().transform.localScale.z * 0.5f
             );
+        }
+
+        public void ClearChild() 
+        {
+            for (int i = 0; i < Section.transform.childCount; i++)
+            {
+                
+            }
         }
     }
 
@@ -192,16 +198,17 @@ namespace Assets
     {
         float MaxElements = 50;
         public float CountBubles = 51;
+        public bool MovedSection;
         public SectionOfShapeBubble(
             GameObject MainCube,
             GameObject Claster,
             Vector3 centerPanelSection,
             int sideRotate,
-            bool EnableClaster, float Opacity)
+            bool EnableClaster, float Opacity, bool MovedSection = false)
             : base(MainCube, Claster, sideRotate, centerPanelSection, EnableClaster)
         {
             this.Opacity = Opacity;
-
+            this.MovedSection = MovedSection;
 
             maxDist = Vector3.Distance(VMaxDist, MainCube.GetComponent<Renderer>().bounds.center);
 
@@ -255,8 +262,8 @@ namespace Assets
             float www = (100 - percentRED) / 100;
 
             //Color result = new Color(1, www, www, Opacity);
-           // Color result = new Color(1 - www, 0, www, Opacity);
-            Color result = new Color(www, 0, 1 - www, Opacity);
+            Color result = new Color(1 - www, 0, www, Opacity);
+            //Color result = new Color(www, 0, 1 - www, Opacity);
 
             return result;
         }
@@ -277,18 +284,16 @@ namespace Assets
                 for (int i = 0; i < Section.transform.childCount; i++)
                 {
                     Color Ncolor = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
-
                     Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
                         = Ncolor;
 
-                    var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
 
-                    var colorModule = ps.colorOverLifetime;
-
-                    colorModule.color = Ncolor;
-
-                    ParticleSystem sdsd = new ParticleSystem();
-
+                    if (MovedSection)
+                    {
+                        var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
+                        var colorModule = ps.colorOverLifetime;
+                        colorModule.color = Ncolor;
+                    }
                 }
             }
             else
@@ -297,8 +302,28 @@ namespace Assets
                 {
                     if (Section.transform.GetChild(i).gameObject.GetComponent<InsideFigure>().IsInside)
                     {
+                        //Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
+                        //= getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
+
+                        Color Ncolor = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
                         Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
-                        = getColorForCylinder(Section.transform.GetChild(i).gameObject.transform.position);
+                            = Ncolor;
+
+                        if (MovedSection)
+                        {
+                            var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
+                            var colorModule = ps.colorOverLifetime;
+                            colorModule.color = Ncolor;
+                        }
+                    }
+                    else
+                    {
+                        if (MovedSection)
+                        {
+                            var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
+                            var colorModule = ps.colorOverLifetime;
+                            colorModule.color = new Color(1,1,1,0);
+                        }        
                     }
                 }
             }
@@ -364,25 +389,30 @@ namespace Assets
                         cylinder.AddComponent<InsideFigure>().parent = this;
                     }
 
-                    cylinder.AddComponent<ParticleSystem>();
-                    
-                    var ps = cylinder.GetComponent<ParticleSystem>();
-                    var sh = ps.shape;
-                    var colorOverLife = ps.colorOverLifetime;
-                    var em = ps.emission;
-                    var colorModule = ps.colorOverLifetime;
+                    //если панель движущиеся дать ей шлейф
+                    if (MovedSection)
+                    {
+                        cylinder.AddComponent<ParticleSystem>();
 
+                        var ps = cylinder.GetComponent<ParticleSystem>();
+                        var sh = ps.shape;
+                        var colorOverLife = ps.colorOverLifetime;
+                        var em = ps.emission;
+                        var colorModule = ps.colorOverLifetime;
+
+
+                        colorModule.enabled = true;
+                        sh.enabled = false;
+                        em.rate = 20;
+                        ps.startSpeed = 0;
+                        ps.time = 10;
+                        ps.startSize = 2;
+                        ps.simulationSpace = ParticleSystemSimulationSpace.World;
+                        ps.playbackSpeed = 5;
+
+                        colorModule.color = new Color(1, 0, 0);
+                    }
                     
-                    colorModule.enabled = true;
-                    sh.enabled = false;
-                    em.rate = 20;
-                    ps.startSpeed = 0;
-                    ps.time = 10;
-                    ps.startSize = 2;
-                    ps.simulationSpace = ParticleSystemSimulationSpace.World;
-                    ps.playbackSpeed = 5;
-    
-                    colorModule.color = new Color(1, 0, 0);
                     
                     
                     

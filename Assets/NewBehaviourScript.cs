@@ -24,6 +24,16 @@ public class NewBehaviourScript : MonoBehaviour
     //слайдер количества точек
     Slider SliderOfCountElements;
 
+
+    //25 aprl
+    //красные точки живут долше
+    //чем синее точка тем она прозрачнее
+
+    // 3 круглишка 
+    // у каждого шлейф в соответсвии с цветом круга
+
+
+
     //устранить повторение кода 
     
     //1 обёмные фигуры  в кластере
@@ -122,7 +132,9 @@ public class NewBehaviourScript : MonoBehaviour
 
 
 
-        MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1);
+        MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1, true);
+        //MovingSection.
+        
         //MovingSection = new SectionOfShapContourCircle(MainCube, Claster, centerCube, SideSection.value, true);
         //Instantiate(MovingSection.Section,MovingSection.CenterPanelSection, MovingSection.Section.transform.rotation);
 
