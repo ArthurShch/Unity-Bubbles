@@ -133,9 +133,12 @@ public class NewBehaviourScript : MonoBehaviour
 
 
         MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1, true);
+        //MovingSection = new SectionOfShapContourCircle(MainCube, Claster, centerCube, SideSection.value, true);
+        
         //MovingSection.
         
-        //MovingSection = new SectionOfShapContourCircle(MainCube, Claster, centerCube, SideSection.value, true);
+        
+        
         //Instantiate(MovingSection.Section,MovingSection.CenterPanelSection, MovingSection.Section.transform.rotation);
 
         MainCube.GetComponent<GlobalFields>().MovingSection = MovingSection;

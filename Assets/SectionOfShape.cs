@@ -309,26 +309,24 @@ namespace Assets
                         Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
                             = Ncolor;
 
-                        if (MovedSection)
-                        {
-                            var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
-                            var colorModule = ps.colorOverLifetime;
-                            colorModule.color = Ncolor;
-                        }
+                        //if (MovedSection)
+                        //{
+                        //    var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
+                        //    var colorModule = ps.colorOverLifetime;
+                        //    colorModule.color = Ncolor;
+                        //}
                     }
-                    else
-                    {
-                        if (MovedSection)
-                        {
-                            var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
-                            var colorModule = ps.colorOverLifetime;
-                            colorModule.color = new Color(1,1,1,0);
-                        }        
-                    }
+                    //else
+                    //{
+                    //    if (MovedSection)
+                    //    {
+                    //        var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
+                    //        var colorModule = ps.colorOverLifetime;
+                    //        colorModule.color = new Color(1,1,1,0);
+                    //    }        
+                    //}
                 }
             }
-
-
         }
 
 
@@ -395,12 +393,15 @@ namespace Assets
                         cylinder.AddComponent<ParticleSystem>();
 
                         var ps = cylinder.GetComponent<ParticleSystem>();
+                        var pssssssssss = cylinder.GetComponent<Rigidbody>();
+                        
                         var sh = ps.shape;
+                        var trigger = ps.trigger;
                         var colorOverLife = ps.colorOverLifetime;
                         var em = ps.emission;
                         var colorModule = ps.colorOverLifetime;
 
-
+                        trigger.enabled = true;
                         colorModule.enabled = true;
                         sh.enabled = false;
                         em.rate = 20;
@@ -411,6 +412,10 @@ namespace Assets
                         ps.playbackSpeed = 5;
 
                         colorModule.color = new Color(1, 0, 0);
+
+                        trigger.SetCollider(0,MainCube.GetComponent<BoxCollider>());
+
+
                     }
                     
                     
