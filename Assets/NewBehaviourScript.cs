@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 
 using Assets;
-using UnityEditor;
+//using UnityEditor;
 public class NewBehaviourScript : MonoBehaviour
 {
     GameObject panelSection;

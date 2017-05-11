@@ -5,7 +5,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEditor;
+
+//using UnityEditor;
+
 
 namespace Assets
 {
@@ -16,7 +18,7 @@ namespace Assets
         GameObject BlueCircle;
         GameObject GreenCircle;
 
-
+        
         public SectionOfShapContourCircle(
             GameObject MainCube,
             GameObject Claster,
@@ -26,12 +28,16 @@ namespace Assets
             : base(MainCube, Claster, sideRotate, centerPanelSection, EnableClaster)
         {
             maxDist = Vector3.Distance(VMaxDist, MainCube.GetComponent<Renderer>().bounds.center);
+            
+          //  GameObject SectionADdd = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/untitled.fbx", typeof(GameObject)) as GameObject;
+            GameObject SectionADdd = Resources.Load("untitled") as GameObject;
+            
 
-            GameObject SectionADdd = AssetDatabase.LoadAssetAtPath("Assets/untitled.fbx", typeof(GameObject)) as GameObject;
             SectionADdd.transform.rotation = Quaternion.identity;
             SectionADdd.transform.Rotate(90f, 0, 0);
 
             SectionADdd.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            //SectionADdd.transform.GetChild(1).GetComponent<Renderer>().material.color = new Color(1, 0, 0);
             //SectionADdd.GetComponent<Renderer>().material.color = new Color(1, 0, 0);
             MonoBehaviour.Instantiate(SectionADdd, Section.transform, false);
 
@@ -47,6 +53,10 @@ namespace Assets
             BlueCircle = Section.transform.GetChild(1).gameObject;
             GreenCircle = Section.transform.GetChild(2).gameObject;
 
+            RedCircle.transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(1, 0, 0);
+            BlueCircle.transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(0, 0, 1);
+            GreenCircle.transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(0, 1, 0);
+            
             SetSizeCircle();
 
             //SectionADdd.transform.parent = Section.transform;

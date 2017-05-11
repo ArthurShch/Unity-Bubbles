@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEditor;
+//using UnityEditor;
 
 namespace Assets
 {
@@ -108,6 +108,8 @@ namespace Assets
                         var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
                         var colorModule = ps.colorOverLifetime;
                         colorModule.color = Ncolor;
+                     
+                        //   ps.startColor = Ncolor;
                     }
                 }
             }
@@ -124,22 +126,26 @@ namespace Assets
                         Section.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color
                             = Ncolor;
 
-                        //if (MovedSection)
-                        //{
-                        //    var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
-                        //    var colorModule = ps.colorOverLifetime;
-                        //    colorModule.color = Ncolor;
-                        //}
+                        if (MovedSection)
+                        {
+                            var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
+                            var colorModule = ps.colorOverLifetime;
+                            colorModule.color = Ncolor;
+
+                          //  ps.startColor = Ncolor;
+                        }
                     }
-                    //else
-                    //{
-                    //    if (MovedSection)
-                    //    {
-                    //        var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
-                    //        var colorModule = ps.colorOverLifetime;
-                    //        colorModule.color = new Color(1,1,1,0);
-                    //    }        
-                    //}
+                    else
+                    {
+                        if (MovedSection)
+                        {
+                            var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
+                            var colorModule = ps.colorOverLifetime;
+                            colorModule.color = new Color(1, 0, 1, 0);
+                            
+                            //ps.startColor =  new Color(1,0,1,0);
+                        }        
+                    }
                 }
             }
         }
@@ -205,48 +211,51 @@ namespace Assets
                     //если панель движущиеся дать ей шлейф
                     if (MovedSection)
                     {
+                       
+
+
                         cylinder.AddComponent<ParticleSystem>();
+                        
 
-
+                        
                         var ps = cylinder.GetComponent<ParticleSystem>();
                         //var pssssssssss = cylinder.GetComponent<Rigidbody>();
 
                         var sh = ps.shape;
                         var trigger = ps.trigger;
-                        //var colorOverLife = ps.colorOverLifetime;
+                       // var colorOverLife = ps.colorOverLifetime;
                         var em = ps.emission;
-                        //var colorModule = ps.colorOverLifetime;
+                       var colorModule = ps.colorOverLifetime;
+
+                       //var sssss = ps.GetComponent<Renderer>();
+
 
                         // trigger.enabled = true;
                         //trigger.inside = ParticleSystemOverlapAction.Callback;
-                        // colorModule.enabled = true;
+
+
+                        colorModule.enabled = true;
                         sh.enabled = false;
                         em.rate = 20;
                         ps.startSpeed = 0;
-                        ps.startLifetime = 4;
-                        ps.startSize = 2;
+                        ps.startLifetime = 1f;
+                        ps.startSize = 5;
+
+                       // ps.startColor = new Color(1, 0, 0);
+                         
+
+                        colorModule.color = new Color(0, 0, 0, 0);
+
                         ps.simulationSpace = ParticleSystemSimulationSpace.World;
 
                         //ps.playbackSpeed = 5;
 
-                        //colorModule.color = new Color(1, 0, 0);
+                        
 
                         // trigger.SetCollider(0, MainCube.GetComponent<BoxCollider>());
 
                         //cylinder.AddComponent<TriggerOfBubblesSetColor>();
                     }
-
-
-
-
-                    //colorOverLife.color = 
-
-                    //ps.;
-
-
-
-
-
                 }
             }
         }
