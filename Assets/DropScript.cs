@@ -56,6 +56,30 @@ public class DropScript : MonoBehaviour
     public void ChangeToggleOfmodeSection() 
     {
 
+        SliderOfCountElements.enabled = ToggleOfmodeSection.isOn;
+        ScrollbarOpacity.enabled = ToggleOfmodeSection.isOn;
+        EnableClaster.enabled = ToggleOfmodeSection.isOn;
+
+
+        if (ToggleOfmodeSection.isOn)
+        {
+            for (int i = 0; i < Sections.Count; i++)
+            {
+                Destroy(Sections[i].Section);
+
+                Sections[i] = ((SectionOfShapContourCircle)(Sections[i])).RepleceType();
+            }
+
+            
+        }
+        else 
+        {
+            for (int i = 0; i < Sections.Count; i++)
+            {
+                Destroy(Sections[i].Section);
+                Sections[i] = ((SectionOfShapeBubble)(Sections[i])).RepleceType();
+            }
+        }
     }
 
     void Start()
