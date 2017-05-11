@@ -20,7 +20,7 @@ public class NewBehaviourScript : MonoBehaviour
     float startPoint;
     float maxDist;
     Toggle ToggleOfmodeSection; // переключатель с шаров на круги
-    SectionOfShape MovingSection;
+   // SectionOfShape MovingSection;
     //слайдер количества точек
     Slider SliderOfCountElements;
 
@@ -65,47 +65,50 @@ public class NewBehaviourScript : MonoBehaviour
     {
         Debug.Log(SliderOfNewSection.value);
         //здесь направление передвижения секции 3 варианта 3 плоскости
-        MovingSection.SetPositionOffset(SliderOfNewSection.value);
+        if (MainCube.GetComponent<GlobalFields>().MovingSection != null)
+        {
+            MainCube.GetComponent<GlobalFields>().MovingSection.SetPositionOffset(SliderOfNewSection.value);
+        }        
     }
 
     private void SideSectionChange()
     {
-        MovingSection.SideRotate = SideSection.value;
+        MainCube.GetComponent<GlobalFields>().MovingSection.SideRotate = SideSection.value;
     }
 
     public void ToggleEnableClaster() 
     {
-        //MovingSection.EnableClaster = EnableClaster.isOn;
-        Destroy(MovingSection.Section);
-        MovingSection.EnableClaster = EnableClaster.isOn;
-        MovingSection.Create();
-        ((SectionOfShapeBubble)MovingSection).CreateBubbles();
+        //MainCube.GetComponent<GlobalFields>().MovingSection.EnableClaster = EnableClaster.isOn;
+        Destroy(MainCube.GetComponent<GlobalFields>().MovingSection.Section);
+        MainCube.GetComponent<GlobalFields>().MovingSection.EnableClaster = EnableClaster.isOn;
+        MainCube.GetComponent<GlobalFields>().MovingSection.Create();
+        ((SectionOfShapeBubble)MainCube.GetComponent<GlobalFields>().MovingSection).CreateBubbles();
     }
 
     public void ChangeCountElements()
     {
-        ((SectionOfShapeBubble)MovingSection).CountBubles = SliderOfCountElements.value;
-        Destroy(MovingSection.Section);
-        MovingSection.Create();
-        ((SectionOfShapeBubble)MovingSection).CreateBubbles();
+        ((SectionOfShapeBubble)MainCube.GetComponent<GlobalFields>().MovingSection).CountBubles = SliderOfCountElements.value;
+        Destroy(MainCube.GetComponent<GlobalFields>().MovingSection.Section);
+        MainCube.GetComponent<GlobalFields>().MovingSection.Create();
+        ((SectionOfShapeBubble)MainCube.GetComponent<GlobalFields>().MovingSection).CreateBubbles();
     }
 
     public void ChangeToggleOfmodeSection()
     {
         if (ToggleOfmodeSection.isOn)
         {
-            //MovingSection.ClearChild();
+            //MainCube.GetComponent<GlobalFields>().MovingSection.ClearChild();
 
-            Destroy(MovingSection.Section);
+            Destroy(MainCube.GetComponent<GlobalFields>().MovingSection.Section);
 
-            MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1, true);
+            MainCube.GetComponent<GlobalFields>().MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1, true);
            
         }
         else 
         {
-            Destroy(MovingSection.Section);
-           // MovingSection.ClearChild();
-            MovingSection = new SectionOfShapContourCircle(MainCube, Claster, centerCube, SideSection.value, true);        
+            Destroy(MainCube.GetComponent<GlobalFields>().MovingSection.Section);
+           // MainCube.GetComponent<GlobalFields>().MovingSection.ClearChild();
+            MainCube.GetComponent<GlobalFields>().MovingSection = new SectionOfShapContourCircle(MainCube, Claster, centerCube, SideSection.value, true);        
         }
     }
     
@@ -152,7 +155,7 @@ public class NewBehaviourScript : MonoBehaviour
 
 
 
-        MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1, true);
+        MainCube.GetComponent<GlobalFields>().MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1, true);
         //MovingSection = new SectionOfShapContourCircle(MainCube, Claster, centerCube, SideSection.value, true);
         
         //MovingSection.
@@ -161,7 +164,7 @@ public class NewBehaviourScript : MonoBehaviour
         
         //Instantiate(MovingSection.Section,MovingSection.CenterPanelSection, MovingSection.Section.transform.rotation);
 
-        MainCube.GetComponent<GlobalFields>().MovingSection = MovingSection;
+        //MainCube.GetComponent<GlobalFields>().MovingSection = MovingSection;
         ValueChangeCheck();
         SideSectionChange();
 
