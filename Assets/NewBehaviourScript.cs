@@ -19,7 +19,7 @@ public class NewBehaviourScript : MonoBehaviour
     List<GameObject> sharePoint;// секция которая двигается
     float startPoint;
     float maxDist;
-
+    Toggle ToggleOfmodeSection; // переключатель с шаров на круги
     SectionOfShape MovingSection;
     //слайдер количества точек
     Slider SliderOfCountElements;
@@ -90,6 +90,24 @@ public class NewBehaviourScript : MonoBehaviour
         ((SectionOfShapeBubble)MovingSection).CreateBubbles();
     }
 
+    public void ChangeToggleOfmodeSection()
+    {
+        if (ToggleOfmodeSection.isOn)
+        {
+            //MovingSection.ClearChild();
+
+            Destroy(MovingSection.Section);
+
+            MovingSection = new SectionOfShapeBubble(MainCube, Claster, centerCube, SideSection.value, true, 1, true);
+           
+        }
+        else 
+        {
+            Destroy(MovingSection.Section);
+           // MovingSection.ClearChild();
+            MovingSection = new SectionOfShapContourCircle(MainCube, Claster, centerCube, SideSection.value, true);        
+        }
+    }
     
     void Start()
     {
@@ -101,10 +119,12 @@ public class NewBehaviourScript : MonoBehaviour
         cam_holder = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
         EnableClaster = GameObject.FindWithTag("EnableClaster").GetComponent<Toggle>();
+        ToggleOfmodeSection = GameObject.FindWithTag("ToggleOfmodeSection").GetComponent<Toggle>();
         SliderOfCountElements = GameObject.FindWithTag("SliderOfCountElements").GetComponent<Slider>();
         SliderOfCountElements.onValueChanged.AddListener(delegate { ChangeCountElements(); });
         EnableClaster.onValueChanged.AddListener(delegate { ToggleEnableClaster(); });
         SideSection.onValueChanged.AddListener(delegate { SideSectionChange(); });
+        ToggleOfmodeSection.onValueChanged.AddListener(delegate { ChangeToggleOfmodeSection(); });
 
         MainCube = GameObject.FindWithTag("CenterAquo");
         //получение глобальной перемонной. движущийся панели

@@ -185,13 +185,13 @@ namespace Assets
             );
         }
 
-        public void ClearChild() 
-        {
-            for (int i = 0; i < Section.transform.childCount; i++)
-            {
+        //public void ClearChild() 
+        //{
+        //    for (int i = 0; i < Section.transform.childCount; i++)
+        //    {
                 
-            }
-        }
+        //    }
+        //}
     }
 
     public class SectionOfShapeBubble : SectionOfShape
@@ -391,31 +391,34 @@ namespace Assets
                     if (MovedSection)
                     {
                         cylinder.AddComponent<ParticleSystem>();
+                        
 
                         var ps = cylinder.GetComponent<ParticleSystem>();
-                        var pssssssssss = cylinder.GetComponent<Rigidbody>();
+                        //var pssssssssss = cylinder.GetComponent<Rigidbody>();
                         
                         var sh = ps.shape;
                         var trigger = ps.trigger;
-                        var colorOverLife = ps.colorOverLifetime;
+                        //var colorOverLife = ps.colorOverLifetime;
                         var em = ps.emission;
-                        var colorModule = ps.colorOverLifetime;
+                        //var colorModule = ps.colorOverLifetime;
 
-                        trigger.enabled = true;
-                        colorModule.enabled = true;
+                       // trigger.enabled = true;
+                        //trigger.inside = ParticleSystemOverlapAction.Callback;
+                       // colorModule.enabled = true;
                         sh.enabled = false;
                         em.rate = 20;
                         ps.startSpeed = 0;
-                        ps.time = 10;
+                        ps.startLifetime = 4;
                         ps.startSize = 2;
                         ps.simulationSpace = ParticleSystemSimulationSpace.World;
-                        ps.playbackSpeed = 5;
 
-                        colorModule.color = new Color(1, 0, 0);
+                        //ps.playbackSpeed = 5;
 
-                        trigger.SetCollider(0,MainCube.GetComponent<BoxCollider>());
+                        //colorModule.color = new Color(1, 0, 0);
 
+                       // trigger.SetCollider(0, MainCube.GetComponent<BoxCollider>());
 
+                        //cylinder.AddComponent<TriggerOfBubblesSetColor>();
                     }
                     
                     
@@ -450,6 +453,18 @@ namespace Assets
             //MonoBehaviour.Instantiate(;
             MonoBehaviour.Instantiate(SectionADdd, Section.transform,false);
             
+            //Section.transform.rotation = Quaternion.identity;
+            //SectionADdd.transform.Rotate(90, 0, 0); 
+
+            for (int i = 0; i < Section.transform.childCount; i++)
+			{
+                Section.transform.GetChild(i).gameObject.transform.Rotate(90f, 0, 0);
+
+                Section.transform.GetChild(i).gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+			}
+
+            
+
             //SectionADdd.transform.parent = Section.transform;
 
             //CreateBubbles();
