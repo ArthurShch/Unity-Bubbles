@@ -20,6 +20,7 @@ public class DropScript : MonoBehaviour
     public float maxDist;
     Scrollbar ScrollbarOpacity;
     Toggle ModeView;
+    Toggle ToggleOfmodeSection;
     //получить все точки для анимации
     List<SectionOfShape> Sections;
     SectionOfShape MovingSections;
@@ -52,6 +53,11 @@ public class DropScript : MonoBehaviour
         }
     }
 
+    public void ChangeToggleOfmodeSection() 
+    {
+
+    }
+
     void Start()
     {
         respawnPrefab = GameObject.FindWithTag("CenterAquo");
@@ -65,6 +71,7 @@ public class DropScript : MonoBehaviour
         SideSection = GameObject.FindWithTag("SideSection").GetComponent<Dropdown>();
         Drop = GameObject.FindWithTag("Drop").GetComponent<Dropdown>();
         EnableClaster = GameObject.FindWithTag("EnableClaster").GetComponent<Toggle>();
+        ToggleOfmodeSection = GameObject.FindWithTag("ToggleOfmodeSection").GetComponent<Toggle>();
         panelSection = GameObject.FindWithTag("panelSection");
         Claster = GameObject.FindWithTag("Claster");
         ScrollbarOpacity = GameObject.FindWithTag("ScrollbarOpacity").GetComponent<Scrollbar>();
@@ -83,6 +90,7 @@ public class DropScript : MonoBehaviour
 
         maxDist = Vector3.Distance(VMaxDist, centerCube);
 
+        ToggleOfmodeSection.onValueChanged.AddListener(delegate { ChangeToggleOfmodeSection(); });
         SliderOfCountElements.onValueChanged.AddListener(delegate { ChangeCountElements(); });
         SideSection.onValueChanged.AddListener(delegate { SideSectionChange(); });
         Drop.onValueChanged.AddListener(delegate { myDropdownValueChangedHandler(); });
@@ -211,19 +219,32 @@ public class DropScript : MonoBehaviour
     public void AddNewOption()
     {
 
-        //сохранение ссылки на обьект при первом добовлении
-        if (MovingSections == null)
+        ////сохранение ссылки на обьект при первом добовлении
+        //if (MovingSections == null)
+        //{
+        //    MovingSections = respawnPrefab.GetComponent<GlobalFields>().MovingSection;
+        //}
+
+        if (ToggleOfmodeSection.isOn)
         {
-            MovingSections = respawnPrefab.GetComponent<GlobalFields>().MovingSection;
+            Sections.Add(new SectionOfShapeBubble(respawnPrefab,
+                Claster,
+                respawnPrefab.GetComponent<GlobalFields>().MovingSection.CenterPanelSection,
+                //panelSection.GetComponent<Renderer>().bounds.center, 
+                SideSection.value,
+                EnableClaster.isOn,
+                ScrollbarOpacity.value));
+        }
+        else 
+        {
+            Sections.Add(new SectionOfShapContourCircle(respawnPrefab, 
+                Claster,
+                respawnPrefab.GetComponent<GlobalFields>().MovingSection.CenterPanelSection, 
+                SideSection.value, 
+                true));
         }
 
-        Sections.Add(new SectionOfShapeBubble(respawnPrefab,
-                Claster,
-                MovingSections.CenterPanelSection,
-                //panelSection.GetComponent<Renderer>().bounds.center, 
-                SideSection.value, 
-                EnableClaster.isOn, 
-                ScrollbarOpacity.value));
+        
 
         Drop.options.Add(new Dropdown.OptionData("new text"));
     }
