@@ -108,7 +108,7 @@ namespace Assets
                         var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
                         var colorModule = ps.colorOverLifetime;
                         colorModule.color = Ncolor;
-                     
+
                         //   ps.startColor = Ncolor;
                     }
                 }
@@ -132,7 +132,7 @@ namespace Assets
                             var colorModule = ps.colorOverLifetime;
                             colorModule.color = Ncolor;
 
-                          //  ps.startColor = Ncolor;
+                            //  ps.startColor = Ncolor;
                         }
                     }
                     else
@@ -142,9 +142,9 @@ namespace Assets
                             var ps = Section.transform.GetChild(i).gameObject.GetComponent<ParticleSystem>();
                             var colorModule = ps.colorOverLifetime;
                             colorModule.color = new Color(1, 0, 1, 0);
-                            
+
                             //ps.startColor =  new Color(1,0,1,0);
-                        }        
+                        }
                     }
                 }
             }
@@ -211,23 +211,35 @@ namespace Assets
                     //если панель движущиеся дать ей шлейф
                     if (MovedSection)
                     {
-                       
+
 
 
                         cylinder.AddComponent<ParticleSystem>();
-                        
-
-                        
                         var ps = cylinder.GetComponent<ParticleSystem>();
+
+                        ParticleSystemRenderer psr = cylinder.GetComponent<ParticleSystemRenderer>();
+                        Material mat = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+                        psr.material = mat;
+                        psr.renderMode = ParticleSystemRenderMode.Mesh;
+
+                        //Mesh mesh  = new 
+
+                        GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                        Mesh mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
+                      //  Mesh mesh = GameObject.CreatePrimitive(PrimitiveType.Sphere).GetComponent<MeshFilter>().sharedMesh;
+
+                        psr.mesh = mesh;
+                        GameObject.Destroy(gameObject);
+
                         //var pssssssssss = cylinder.GetComponent<Rigidbody>();
 
                         var sh = ps.shape;
                         var trigger = ps.trigger;
-                       // var colorOverLife = ps.colorOverLifetime;
+                        // var colorOverLife = ps.colorOverLifetime;
                         var em = ps.emission;
-                       var colorModule = ps.colorOverLifetime;
+                        var colorModule = ps.colorOverLifetime;
 
-                       //var sssss = ps.GetComponent<Renderer>();
+                        //var sssss = ps.GetComponent<Renderer>();
 
 
                         // trigger.enabled = true;
@@ -241,8 +253,8 @@ namespace Assets
                         ps.startLifetime = 1f;
                         ps.startSize = 5;
 
-                       // ps.startColor = new Color(1, 0, 0);
-                         
+                        // ps.startColor = new Color(1, 0, 0);
+
 
                         colorModule.color = new Color(0, 0, 0, 0);
 
@@ -250,7 +262,7 @@ namespace Assets
 
                         //ps.playbackSpeed = 5;
 
-                        
+
 
                         // trigger.SetCollider(0, MainCube.GetComponent<BoxCollider>());
 
