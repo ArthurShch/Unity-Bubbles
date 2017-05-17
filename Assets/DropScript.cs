@@ -31,6 +31,12 @@ public class DropScript : MonoBehaviour
     Timer timer;
     int counterStop = 0;
 
+    //////////////
+    bool haveAnimation = false;
+
+    float OffSetAnimation = 0;
+    ////////////
+
     //проверка изменения цвета
     public static void Count(object obj, float param = 0f)
     {
@@ -283,21 +289,28 @@ public class DropScript : MonoBehaviour
 
     public void Animation() 
     {
+        Vector3 startVector = new Vector3(40, -435, -1014);
+        respawnPrefab.GetComponent<GlobalFields>().MovingSection.Section.transform.position = startVector; 
+
+        haveAnimation = true;
+
+
+
        // //Time.deltaTime
 
        //// Update();
        // получить все точки
-        listOfSphere = new List<GameObject>();
+        //listOfSphere = new List<GameObject>();
 
-        foreach (SectionOfShapeBubble item in Sections)
-        {
-            for (int i = 0; i < item.Section.transform.childCount; i++)
-            {
+        //foreach (SectionOfShapeBubble item in Sections)
+        //{
+        //    for (int i = 0; i < item.Section.transform.childCount; i++)
+        //    {
 
-                item.Section.transform.GetChild(i).gameObject.AddComponent<AnimationOpacitySphere>();
-               // listOfSphere.Add()
-            }
-        }
+        //        item.Section.transform.GetChild(i).gameObject.AddComponent<AnimationOpacitySphere>();
+        //       // listOfSphere.Add()
+        //    }
+        //}
 
         //foreach (GameObject item in Sections.)
         //{
@@ -399,6 +412,45 @@ public class DropScript : MonoBehaviour
 
     void Update()
     {
+
+
+
+        if (haveAnimation)
+        {
+
+
+            respawnPrefab.GetComponent<GlobalFields>().MovingSection.SetPositionOffset(OffSetAnimation);
+
+            if (ToggleOfmodeSection.isOn)
+            {
+                OffSetAnimation += 2;
+            }
+            else { OffSetAnimation += 0.2f; }
+
+            
+
+            if (OffSetAnimation >= 50)
+            {
+                haveAnimation = false;
+                OffSetAnimation = 0;
+            }
+
+            //Vector3 curPosition = respawnPrefab.GetComponent<GlobalFields>().MovingSection.Section.transform.position;
+
+            //float posZ = curPosition.z - 2f;
+
+            //respawnPrefab.GetComponent<GlobalFields>().MovingSection.Section.transform.position =
+            //    new Vector3(curPosition.x, curPosition.y, posZ);
+
+            //if (posZ <= -1064 )
+            //{
+            //    haveAnimation = false;    
+            //}
+        }
+
+
+
+
         //if (titi > 0)
         //{
         //    titi -= Time.deltaTime;

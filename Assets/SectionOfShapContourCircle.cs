@@ -19,6 +19,7 @@ namespace Assets
         GameObject GreenCircle;
 
         
+
         public SectionOfShapContourCircle(
             GameObject MainCube,
             GameObject Claster,
@@ -83,6 +84,8 @@ namespace Assets
 
             //25 = 100, самый край маленький размер
             //0 = 0, самый центр, большой размер
+
+            
 
             float ValueRedCircle = 25f - Value;
             float ValueBlueCircle = 12.5f - Value;

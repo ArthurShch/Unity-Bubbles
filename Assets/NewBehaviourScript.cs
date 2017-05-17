@@ -180,8 +180,8 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
+        //((SectionOfShapeBubble)MainCube.GetComponent<GlobalFields>().MovingSection).setColorAllparcticle();
+        
     }
 
 
