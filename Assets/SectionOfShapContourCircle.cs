@@ -114,9 +114,9 @@ namespace Assets
             //psBlueCircle.duration = 1;
             //psGreenCircle.duration= 1f;
 
-            psRedCircle.startLifetime = 1;
-            psBlueCircle.startLifetime = 1;
-            psGreenCircle.startLifetime = 1;
+            psRedCircle.startLifetime = 0.6f;
+            psBlueCircle.startLifetime = 0.6f;
+            psGreenCircle.startLifetime = 0.6f;
 
             psRedCircle.startSpeed = 0;
             psBlueCircle.startSpeed = 0;
