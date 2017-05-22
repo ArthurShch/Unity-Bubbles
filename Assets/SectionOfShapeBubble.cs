@@ -44,11 +44,7 @@ namespace Assets
         //}
 
         
-        public override void ClearPS() 
-        {
-
-        }
-
+     
         protected override void OpacityChane()
         {
             for (int i = 0; i < Section.transform.childCount; i++)
