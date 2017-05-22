@@ -290,7 +290,8 @@ public class DropScript : MonoBehaviour
     public void Animation() 
     {
         Vector3 startVector = new Vector3(40, -435, -1014);
-        respawnPrefab.GetComponent<GlobalFields>().MovingSection.Section.transform.position = startVector; 
+        respawnPrefab.GetComponent<GlobalFields>().MovingSection.Section.transform.position = startVector;
+      //  respawnPrefab.GetComponent<GlobalFields>().MovingSection.ClearPS();
 
         haveAnimation = true;
 

@@ -159,6 +159,9 @@ namespace Assets
         }
         protected virtual void OpacityChane() { }
 
+        ////очистка созданных парктикулей
+        //public virtual void ClearPS() { }
+
         public void Create()
         {
             Section = GameObject.CreatePrimitive(PrimitiveType.Cube);
